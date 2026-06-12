@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import xyz.devcmb.gnome.isOnIsland
@@ -21,44 +22,20 @@ class DayNightDetection : GnomeFeature {
             if(!isOnIsland()) return@register
 
             val time = getCurrentTime(client)
-
-            if(time == Time.DAY && currentTime != Time.DAY) {
-                if(currentTime != null) {
-                    client.sendMessage(
-                        Component.empty().append(
-                            Component.literal("(")
-                            .append(
-                                Component.literal("\uE000")
-                                    .withFont(Identifier.fromNamespaceAndPath("gnome", "main"))
-                                    .withColor(0xFFFFFF)
-                            )
-                            .append(Component.literal(") It is now day time!"))
-                        ).withColor(0xf3ff60)
-                    )
-
-                    client.level?.playPlayerSound(SoundEvents.GOAT_HORN_SOUND_VARIANTS[0].value(), SoundSource.UI, 1f, 1f)
-                }
-
-                currentTime = Time.DAY
-            } else if(time == Time.NIGHT && currentTime != Time.NIGHT) {
-                if(currentTime != null) {
-                    client.sendMessage(
-                        Component.empty().append(
-                            Component.literal("(")
-                                .append(
-                                    Component.literal("\uE001")
-                                        .withFont(Identifier.fromNamespaceAndPath("gnome", "main"))
-                                        .withColor(0xFFFFFF)
-                                )
-                                .append(Component.literal(") It is now night time!"))
-                        ).withColor(0xf3ff60)
-                    )
-
-                    client.level?.playPlayerSound(SoundEvents.GOAT_HORN_SOUND_VARIANTS[1].value(), SoundSource.UI, 1f, 1f)
-                }
-
-                currentTime = Time.NIGHT
+            if(time != null && currentTime != null && time != currentTime) {
+                client.sendMessage(Component.empty().append(
+                    Component.literal("(")
+                        .append(
+                            Component.literal(time.clock)
+                                .withFont(Identifier.fromNamespaceAndPath("gnome", "main"))
+                                .withColor(0xFFFFFF)
+                        )
+                        .append(Component.literal(") It is now ${time.time} time!"))
+                ).withColor(0xf3ff60))
+                client.level?.playPlayerSound(time.sound, SoundSource.UI, 1f, 1f)
             }
+
+            currentTime = time
         }
     }
 
@@ -79,8 +56,8 @@ class DayNightDetection : GnomeFeature {
         return if(name.contains(dayGlyph)) Time.DAY else Time.NIGHT
     }
 
-    enum class Time {
-        DAY,
-        NIGHT
+    enum class Time(val clock: String, val time: String, val sound: SoundEvent) {
+        DAY("\uE000", "day", SoundEvents.GOAT_HORN_SOUND_VARIANTS[0].value()),
+        NIGHT("\uE001", "night", SoundEvents.GOAT_HORN_SOUND_VARIANTS[1].value()),
     }
 }
