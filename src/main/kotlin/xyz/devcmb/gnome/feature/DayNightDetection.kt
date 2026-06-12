@@ -2,10 +2,14 @@ package xyz.devcmb.gnome.feature
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.minecraft.client.Minecraft
+import net.minecraft.network.chat.Component
+import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import xyz.devcmb.gnome.isOnIsland
 import xyz.devcmb.gnome.mixin.BossEventAccessor
+import xyz.devcmb.gnome.sendMessage
+import xyz.devcmb.gnome.withFont
 
 class DayNightDetection : GnomeFeature {
     var currentTime: Time? = null
@@ -20,16 +24,40 @@ class DayNightDetection : GnomeFeature {
 
             if(time == Time.DAY && currentTime != Time.DAY) {
                 if(currentTime != null) {
+                    client.sendMessage(
+                        Component.empty().append(
+                            Component.literal("(")
+                            .append(
+                                Component.literal("\uE000")
+                                    .withFont(Identifier.fromNamespaceAndPath("gnome", "main"))
+                                    .withColor(0xFFFFFF)
+                            )
+                            .append(Component.literal(") It is now day time!"))
+                        ).withColor(0xf3ff60)
+                    )
+
                     client.level?.playPlayerSound(SoundEvents.GOAT_HORN_SOUND_VARIANTS[0].value(), SoundSource.UI, 1f, 1f)
                 }
+
                 currentTime = Time.DAY
             } else if(time == Time.NIGHT && currentTime != Time.NIGHT) {
-                if(currentTime != Time.NIGHT) {
-                    if(currentTime != null) {
-                        client.level?.playPlayerSound(SoundEvents.GOAT_HORN_SOUND_VARIANTS[1].value(), SoundSource.UI, 1f, 1f)
-                    }
-                    currentTime = Time.NIGHT
+                if(currentTime != null) {
+                    client.sendMessage(
+                        Component.empty().append(
+                            Component.literal("(")
+                                .append(
+                                    Component.literal("\uE001")
+                                        .withFont(Identifier.fromNamespaceAndPath("gnome", "main"))
+                                        .withColor(0xFFFFFF)
+                                )
+                                .append(Component.literal(") It is now night time!"))
+                        ).withColor(0xf3ff60)
+                    )
+
+                    client.level?.playPlayerSound(SoundEvents.GOAT_HORN_SOUND_VARIANTS[1].value(), SoundSource.UI, 1f, 1f)
                 }
+
+                currentTime = Time.NIGHT
             }
         }
     }

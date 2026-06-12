@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory
 import xyz.devcmb.gnome.feature.DayNightDetection
 import xyz.devcmb.gnome.feature.GnomeFeature
 
-
 object Gnome : ModInitializer {
 	const val MOD_ID: String = "gnome"
 	val logger: Logger = LoggerFactory.getLogger(MOD_ID)
