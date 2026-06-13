@@ -3,15 +3,15 @@
 	"id": "gnome",
 	"version": "${version}",
 	"name": "Gnome",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "A client-side utility mod for MCC Island fishing",
 	"authors": [
-		"Me!"
+		"DevCmb"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/29cmb/Gnome",
+		"issues": "https://github.com/29cmb/Gnome/issues"
 	},
-	"license": "CC0-1.0",
+	"license": "GPLv3",
 	"icon": "assets/gnome/icon.png",
 	"environment": "*",
 	"entrypoints": {
