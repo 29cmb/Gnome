@@ -9,6 +9,8 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import net.minecraft.util.ARGB
 import xyz.devcmb.gnome.Gnome
+import xyz.devcmb.gnome.isOnFishing
+import xyz.devcmb.gnome.isOnIsland
 import xyz.devcmb.gnome.withFont
 
 class SessionStats : GnomeFeature {
@@ -45,7 +47,9 @@ class SessionStats : GnomeFeature {
     }
 
     fun statsLayer(): HudElement {
-        return { graphics, _ ->
+        return element@{ graphics, _ ->
+            if(!isOnIsland() || !isOnFishing()) return@element
+
             graphics.blit(
                 RenderPipelines.GUI_TEXTURED,
                 Identifier.fromNamespaceAndPath(Gnome.MOD_ID, "textures/gui/fishing_session_stats.png"),

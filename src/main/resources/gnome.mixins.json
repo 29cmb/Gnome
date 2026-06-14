@@ -3,7 +3,9 @@
 	"package": "xyz.devcmb.gnome.mixin",
 	"compatibilityLevel": "JAVA_25",
 	"mixins": [
-		"BossEventAccessor"
+		"BossEventAccessor",
+		"TabListAccessor",
+		"GuiMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
