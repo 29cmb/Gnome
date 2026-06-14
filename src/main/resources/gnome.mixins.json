@@ -5,7 +5,8 @@
 	"mixins": [
 		"BossEventAccessor",
 		"TabListAccessor",
-		"GuiMixin"
+		"GuiMixin",
+		"GuiAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1

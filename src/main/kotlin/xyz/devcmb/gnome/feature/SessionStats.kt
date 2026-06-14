@@ -11,6 +11,7 @@ import net.minecraft.util.ARGB
 import xyz.devcmb.gnome.Gnome
 import xyz.devcmb.gnome.isOnFishing
 import xyz.devcmb.gnome.isOnIsland
+import xyz.devcmb.gnome.mixin.GuiAccessor
 import xyz.devcmb.gnome.withFont
 
 class SessionStats : GnomeFeature {
@@ -63,10 +64,16 @@ class SessionStats : GnomeFeature {
                 180, 16
             )
 
+            val actionBar = (Minecraft.getInstance().gui as GuiAccessor).`gnome$getOverlayMessageString`() ?: Component.empty()
+            val hasXPBoost =
+                actionBar.string.contains("\uE391")
+                || actionBar.string.contains("\uE392")
+                || actionBar.string.contains("\uE393")
+
             graphics.blit(
                 RenderPipelines.GUI_TEXTURED,
                 Identifier.fromNamespaceAndPath(Gnome.MOD_ID, "textures/gui/xp_amount.png"),
-                ((graphics.guiWidth() - 180) / 2) + 182, graphics.guiHeight() - 30,
+                ((graphics.guiWidth() - 180) / 2) + 182, graphics.guiHeight() - (if(hasXPBoost) 30 else 17),
                 0f, 0f,
                 39, 16,
                 39, 16
@@ -77,7 +84,7 @@ class SessionStats : GnomeFeature {
                 caughtPearls to (75 to 0),
                 caughtTreasure to (132 to 0),
                 caughtSpirits to (173 to 0),
-                sessionXP to (215 to 30)
+                sessionXP to (215 to if(hasXPBoost) 30 else 43)
             )
 
             values.forEach { (amount, offset) ->
