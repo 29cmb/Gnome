@@ -19,13 +19,16 @@ class SessionStats : GnomeFeature {
     var caughtTreasure: Int = 0
     var caughtSpirits: Int = 0
 
+    var sessionXP: Int = 0
+
     val fishRegex: Regex = Regex("You caught: \\[[A-z, ]*[\uE0D6\uE0D0\uE0D8\uE0CF].*] *(?:x(?<amount>[0-9]*))?")
     val pearlRegex: Regex = Regex("You caught: \\[[A-z]* Pearl] *(?:x(?<amount>[0-9]*))?")
     val spiritRegex: Regex = Regex("You caught: \\[[A-z, ]* Spirit] *(?:x(?<amount>[0-9]*))?")
     val treasureRegex: Regex = Regex("You caught: \\[[A-z]* Treasure] *(?:x(?<amount>[0-9]*))?")
+    val xpRegex: Regex = Regex("You earned: (?<amount>[0-9]*) Island XP")
 
     override fun init() {
-        HudElementRegistry.addFirst(Identifier.fromNamespaceAndPath(Gnome.MOD_ID, "fishing_session_stats"), statsLayer())
+        HudElementRegistry.addFirst(Identifier.fromNamespaceAndPath(Gnome.MOD_ID, "fishing_session_stats"), hotbarSessionStatsLayer())
 
         ClientReceiveMessageEvents.GAME.register { component, _ ->
             val regexValues = arrayListOf(
@@ -33,6 +36,7 @@ class SessionStats : GnomeFeature {
                 ::caughtPearls to pearlRegex,
                 ::caughtTreasure to treasureRegex,
                 ::caughtSpirits to spiritRegex,
+                ::sessionXP to xpRegex
             )
 
             regexValues.forEach { (field, regex) ->
@@ -46,7 +50,7 @@ class SessionStats : GnomeFeature {
     override fun cleanup() {
     }
 
-    fun statsLayer(): HudElement {
+    fun hotbarSessionStatsLayer(): HudElement {
         return element@{ graphics, _ ->
             if(!isOnIsland() || !isOnFishing()) return@element
 
@@ -59,11 +63,21 @@ class SessionStats : GnomeFeature {
                 180, 16
             )
 
-            val values: ArrayList<Pair<Int, Int>> = arrayListOf(
-                caughtFish to 33,
-                caughtPearls to 75,
-                caughtTreasure to 132,
-                caughtSpirits to 173
+            graphics.blit(
+                RenderPipelines.GUI_TEXTURED,
+                Identifier.fromNamespaceAndPath(Gnome.MOD_ID, "textures/gui/xp_amount.png"),
+                ((graphics.guiWidth() - 180) / 2) + 182, graphics.guiHeight() - 30,
+                0f, 0f,
+                39, 16,
+                39, 16
+            )
+
+            val values: ArrayList<Pair<Int, Pair<Int, Int>>> = arrayListOf(
+                caughtFish to (33 to 0),
+                caughtPearls to (75 to 0),
+                caughtTreasure to (132 to 0),
+                caughtSpirits to (173 to 0),
+                sessionXP to (215 to 30)
             )
 
             values.forEach { (amount, offset) ->
@@ -74,8 +88,8 @@ class SessionStats : GnomeFeature {
                 graphics.text(
                     Minecraft.getInstance().font,
                     component,
-                    (((graphics.guiWidth() - 180) / 2) + offset) - fontOffset,
-                    graphics.guiHeight() - 57,
+                    (((graphics.guiWidth() - 180) / 2) + offset.first) - fontOffset,
+                    graphics.guiHeight() - 57 + offset.second,
                     ARGB.opaque(0xFFFFFF)
                 )
             }
