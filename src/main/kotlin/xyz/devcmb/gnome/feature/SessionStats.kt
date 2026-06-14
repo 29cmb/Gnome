@@ -62,8 +62,8 @@ class SessionStats : GnomeFeature {
                 Identifier.fromNamespaceAndPath(Gnome.MOD_ID, "textures/gui/fishing_session_stats.png"),
                 ((graphics.guiWidth() - 180) / 2) - 1, graphics.guiHeight() - 60,
                 0f, 0f,
-                180, 16,
-                180, 16
+                181, 16,
+                181, 16
             )
 
             val actionBar = (Minecraft.getInstance().gui as GuiAccessor).`gnome$getOverlayMessageString`() ?: Component.empty()
@@ -85,7 +85,7 @@ class SessionStats : GnomeFeature {
                 caughtFish to (33 to 0),
                 caughtPearls to (75 to 0),
                 caughtTreasure to (132 to 0),
-                caughtSpirits to (173 to 0),
+                caughtSpirits to (172 to 0),
                 sessionXP to (215 to if(hasXPBoost) 30 else 43)
             )
 
