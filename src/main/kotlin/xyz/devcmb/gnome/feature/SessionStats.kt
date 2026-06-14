@@ -32,7 +32,8 @@ class SessionStats : GnomeFeature {
     override fun init() {
         HudElementRegistry.addFirst(Identifier.fromNamespaceAndPath(Gnome.MOD_ID, "fishing_session_stats"), hotbarSessionStatsLayer())
 
-        ClientReceiveMessageEvents.GAME.register { component, _ ->
+        // Can't hook `GAME` because if something like Jamboree blocks the message, it won't fire
+        ClientReceiveMessageEvents.ALLOW_GAME.register { component, _ ->
             // even if its disabled, we can still track these stats in the background
             val regexValues = arrayListOf(
                 ::caughtFish to fishRegex,
@@ -47,6 +48,8 @@ class SessionStats : GnomeFeature {
                 val amount = result["amount"]?.value?.toIntOrNull() ?: 1
                 field.set(field.get() + amount)
             }
+
+            return@register true
         }
     }
 
@@ -85,7 +88,7 @@ class SessionStats : GnomeFeature {
                 caughtFish to (33 to 0),
                 caughtPearls to (75 to 0),
                 caughtTreasure to (132 to 0),
-                caughtSpirits to (172 to 0),
+                caughtSpirits to (173 to 0),
                 sessionXP to (215 to if(hasXPBoost) 30 else 43)
             )
 
