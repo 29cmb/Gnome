@@ -20,7 +20,8 @@
 				"value": "xyz.devcmb.gnome.Gnome",
 				"adapter": "kotlin"
 			}
-		]
+		],
+		"modmenu": [ "xyz.devcmb.gnome.GnomeModMenuImpl" ]
 	},
 	"mixins": [
 		"gnome.mixins.json"

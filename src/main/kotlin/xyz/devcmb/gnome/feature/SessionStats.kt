@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import net.minecraft.util.ARGB
+import xyz.devcmb.gnome.Config
 import xyz.devcmb.gnome.Gnome
 import xyz.devcmb.gnome.isOnFishing
 import xyz.devcmb.gnome.isOnIsland
@@ -32,6 +33,7 @@ class SessionStats : GnomeFeature {
         HudElementRegistry.addFirst(Identifier.fromNamespaceAndPath(Gnome.MOD_ID, "fishing_session_stats"), hotbarSessionStatsLayer())
 
         ClientReceiveMessageEvents.GAME.register { component, _ ->
+            // even if its disabled, we can still track these stats in the background
             val regexValues = arrayListOf(
                 ::caughtFish to fishRegex,
                 ::caughtPearls to pearlRegex,
@@ -53,7 +55,7 @@ class SessionStats : GnomeFeature {
 
     fun hotbarSessionStatsLayer(): HudElement {
         return element@{ graphics, _ ->
-            if(!isOnIsland() || !isOnFishing()) return@element
+            if(!isOnIsland() || !isOnFishing() || !Config.values.sessionStatsEnabled) return@element
 
             graphics.blit(
                 RenderPipelines.GUI_TEXTURED,

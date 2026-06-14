@@ -14,6 +14,8 @@ object Gnome : ModInitializer {
 	val features: ArrayList<GnomeFeature> = ArrayList()
 
 	override fun onInitialize() {
+		Config.handler.load()
+
 		registerFeature(DayNightDetection())
 		registerFeature(LimboKickWarning())
 		registerFeature(SessionStats())

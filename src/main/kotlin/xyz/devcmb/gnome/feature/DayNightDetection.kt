@@ -7,6 +7,7 @@ import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
+import xyz.devcmb.gnome.Config
 import xyz.devcmb.gnome.isOnFishing
 import xyz.devcmb.gnome.isOnIsland
 import xyz.devcmb.gnome.mixin.BossEventAccessor
@@ -20,7 +21,7 @@ class DayNightDetection : GnomeFeature {
 
     override fun init() {
         ClientTickEvents.END_CLIENT_TICK.register { client ->
-            if(!isOnIsland() || !isOnFishing()) return@register
+            if(!isOnIsland() || !isOnFishing() || !Config.values.dayNightDetectionEnabled) return@register
 
             val time = getCurrentTime(client)
             if(time != null && currentTime != null && time != currentTime) {

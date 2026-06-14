@@ -18,6 +18,14 @@ repositories {
 	maven {
 		url = uri("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
 	}
+
+	maven("https://maven.isxander.dev/releases") {
+		name = "Xander Maven"
+	}
+
+	maven("https://maven.terraformersmc.com/") {
+		name = "Terraformers"
+	}
 }
 
 dependencies {
@@ -25,6 +33,8 @@ dependencies {
 	minecraft("com.mojang:minecraft:${providers.gradleProperty("minecraft_version").get()}")
 	
 	implementation("net.fabricmc:fabric-loader:${providers.gradleProperty("loader_version").get()}")
+	implementation("dev.isxander:yet-another-config-lib:3.9.4+26.1-fabric")
+	implementation("com.terraformersmc:modmenu:18.0.0-beta.1")
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation("net.fabricmc.fabric-api:fabric-api:${providers.gradleProperty("fabric_api_version").get()}")
