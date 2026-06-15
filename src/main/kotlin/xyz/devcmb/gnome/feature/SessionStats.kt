@@ -1,5 +1,6 @@
 package xyz.devcmb.gnome.feature
 
+import dev.isxander.yacl3.api.OptionDescription
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry
 import net.minecraft.client.Minecraft
@@ -7,14 +8,22 @@ import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import net.minecraft.util.ARGB
-import xyz.devcmb.gnome.Config
+import xyz.devcmb.gnome.config.Config
 import xyz.devcmb.gnome.Gnome
 import xyz.devcmb.gnome.isOnFishing
 import xyz.devcmb.gnome.isOnIsland
 import xyz.devcmb.gnome.mixin.GuiAccessor
 import xyz.devcmb.gnome.withFont
+import kotlin.reflect.KMutableProperty0
 
 class SessionStats : GnomeFeature {
+    override val id: String = "session_stats"
+    override val name: String = "Session Statistics"
+    override val description: OptionDescription = OptionDescription.of(
+        Component.literal("Displays treasure, pearls, spirits, fish, and xp caught since you booted up the game")
+    )
+    override val enabledProperty: KMutableProperty0<Boolean> = Config.values::sessionStatsEnabled
+
     var caughtFish: Int = 0
     var caughtPearls: Int = 0
     var caughtTreasure: Int = 0
@@ -44,7 +53,8 @@ class SessionStats : GnomeFeature {
 
         regexValues.forEach { (field, regex) ->
             val result = regex.find(component.string)?.groups ?: return@forEach
-            val amount = result["amount"]?.value?.toIntOrNull() ?: 1
+            val extractedAmount = result["amount"]?.value?.toIntOrNull() ?: 1
+            val amount = Config.values.sessionStatsTrackingMode.calculate(extractedAmount)
             field.set(field.get() + amount)
         }
 
@@ -104,5 +114,10 @@ class SessionStats : GnomeFeature {
                 )
             }
         }
+    }
+
+    enum class TrackingMode(val configName: String, val calculate: (amount: Int) -> Int) {
+        CATCHES("Catches", { 1 }),
+        AMOUNTS("Amounts", { it })
     }
 }

@@ -1,4 +1,4 @@
-package xyz.devcmb.gnome
+package xyz.devcmb.gnome.config
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory
 import com.terraformersmc.modmenu.api.ModMenuApi

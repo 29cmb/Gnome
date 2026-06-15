@@ -3,6 +3,7 @@ package xyz.devcmb.gnome
 import net.fabricmc.api.ModInitializer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import xyz.devcmb.gnome.config.Config
 import xyz.devcmb.gnome.feature.DayNightDetection
 import xyz.devcmb.gnome.feature.GnomeFeature
 import xyz.devcmb.gnome.feature.LimboKickWarning

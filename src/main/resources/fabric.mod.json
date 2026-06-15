@@ -13,7 +13,7 @@
 	},
 	"license": "GPLv3",
 	"icon": "assets/gnome/icon.png",
-	"environment": "*",
+	"environment": "client",
 	"entrypoints": {
 		"main": [
 			{
@@ -21,7 +21,9 @@
 				"adapter": "kotlin"
 			}
 		],
-		"modmenu": [ "xyz.devcmb.gnome.GnomeModMenuImpl" ]
+		"modmenu": [
+			"xyz.devcmb.gnome.config.GnomeModMenuImpl"
+		]
 	},
 	"mixins": [
 		"gnome.mixins.json"
