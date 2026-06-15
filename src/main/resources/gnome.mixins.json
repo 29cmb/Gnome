@@ -6,7 +6,8 @@
 		"BossEventAccessor",
 		"TabListAccessor",
 		"GuiMixin",
-		"GuiAccessor"
+		"GuiAccessor",
+		"ClientPacketMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

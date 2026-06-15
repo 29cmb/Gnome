@@ -21,6 +21,12 @@ object Gnome : ModInitializer {
 		registerFeature(SessionStats())
 	}
 
+	@Suppress("UNCHECKED_CAST")
+	fun <T: GnomeFeature> getFeature(clazz: Class<T>): T {
+		return features.find { clazz.isInstance(it) } as? T
+			?: throw IllegalArgumentException("Feature ${clazz.simpleName} is not currently registered!")
+	}
+
 	fun registerFeature(feature: GnomeFeature) {
 		feature.init()
 		features.add(feature)

@@ -1,6 +1,5 @@
 package xyz.devcmb.gnome.feature
 
-import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry
 import net.minecraft.client.Minecraft
@@ -31,26 +30,25 @@ class SessionStats : GnomeFeature {
 
     override fun init() {
         HudElementRegistry.addFirst(Identifier.fromNamespaceAndPath(Gnome.MOD_ID, "fishing_session_stats"), hotbarSessionStatsLayer())
+    }
 
-        // Can't hook `GAME` because if something like Jamboree blocks the message, it won't fire
-        ClientReceiveMessageEvents.ALLOW_GAME.register { component, _ ->
-            // even if its disabled, we can still track these stats in the background
-            val regexValues = arrayListOf(
-                ::caughtFish to fishRegex,
-                ::caughtPearls to pearlRegex,
-                ::caughtTreasure to treasureRegex,
-                ::caughtSpirits to spiritRegex,
-                ::sessionXP to xpRegex
-            )
+    fun onChatMessage(component: Component) {
+        // even if its disabled, we can still track these stats in the background
+        val regexValues = arrayListOf(
+            ::caughtFish to fishRegex,
+            ::caughtPearls to pearlRegex,
+            ::caughtTreasure to treasureRegex,
+            ::caughtSpirits to spiritRegex,
+            ::sessionXP to xpRegex
+        )
 
-            regexValues.forEach { (field, regex) ->
-                val result = regex.find(component.string)?.groups ?: return@forEach
-                val amount = result["amount"]?.value?.toIntOrNull() ?: 1
-                field.set(field.get() + amount)
-            }
-
-            return@register true
+        regexValues.forEach { (field, regex) ->
+            val result = regex.find(component.string)?.groups ?: return@forEach
+            val amount = result["amount"]?.value?.toIntOrNull() ?: 1
+            field.set(field.get() + amount)
         }
+
+        return
     }
 
     override fun cleanup() {
