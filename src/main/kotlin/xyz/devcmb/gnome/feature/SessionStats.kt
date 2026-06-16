@@ -121,6 +121,7 @@ class SessionStats : GnomeFeature {
         }
     }
 
+    @Suppress("unused")
     enum class TrackingMode(val configName: String, val calculate: (amount: Int) -> Int) {
         CATCHES("Catches", { 1 }),
         AMOUNTS("Amounts", { it })
