@@ -1,6 +1,7 @@
 package xyz.devcmb.gnome
 
 import net.fabricmc.api.ModInitializer
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import xyz.devcmb.gnome.config.Config
@@ -20,6 +21,10 @@ object Gnome : ModInitializer {
 		registerFeature(DayNightDetection())
 		registerFeature(LimboKickWarning())
 		registerFeature(SessionStats())
+
+		ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
+			GnomeCommand.register(dispatcher)
+		}
 	}
 
 	@Suppress("UNCHECKED_CAST")
@@ -27,6 +32,8 @@ object Gnome : ModInitializer {
 		return features.find { clazz.isInstance(it) } as? T
 			?: throw IllegalArgumentException("Feature ${clazz.simpleName} is not currently registered!")
 	}
+
+	inline fun <reified T : GnomeFeature> getFeature(): T = getFeature(T::class.java)
 
 	fun registerFeature(feature: GnomeFeature) {
 		feature.init()

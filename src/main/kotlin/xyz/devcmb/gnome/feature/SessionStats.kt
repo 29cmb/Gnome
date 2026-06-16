@@ -31,7 +31,7 @@ class SessionStats : GnomeFeature {
 
     var sessionXP: Int = 0
 
-    val fishRegex: Regex = Regex("You caught: \\[[A-z, ]*[\uE0D6\uE0D0\uE0D8\uE0CF].*] *(?:x(?<amount>[0-9]*))?")
+    val fishRegex: Regex = Regex("You caught: \\[[A-z, ]*[\uE0D2\uE0D8\uE0D6\uE0D0].*] *(?:x(?<amount>[0-9]*))?")
     val pearlRegex: Regex = Regex("You caught: \\[[A-z]* Pearl] *(?:x(?<amount>[0-9]*))?")
     val spiritRegex: Regex = Regex("You caught: \\[[A-z, ]* Spirit] *(?:x(?<amount>[0-9]*))?")
     val treasureRegex: Regex = Regex("You caught: \\[[A-z]* Treasure] *(?:x(?<amount>[0-9]*))?")
@@ -41,16 +41,16 @@ class SessionStats : GnomeFeature {
         HudElementRegistry.addFirst(Identifier.fromNamespaceAndPath(Gnome.MOD_ID, "fishing_session_stats"), hotbarSessionStatsLayer())
     }
 
+    val regexValues = arrayListOf(
+        ::caughtFish to fishRegex,
+        ::caughtPearls to pearlRegex,
+        ::caughtTreasure to treasureRegex,
+        ::caughtSpirits to spiritRegex,
+        ::sessionXP to xpRegex
+    )
+
     fun onChatMessage(component: Component) {
         // even if its disabled, we can still track these stats in the background
-        val regexValues = arrayListOf(
-            ::caughtFish to fishRegex,
-            ::caughtPearls to pearlRegex,
-            ::caughtTreasure to treasureRegex,
-            ::caughtSpirits to spiritRegex,
-            ::sessionXP to xpRegex
-        )
-
         regexValues.forEach { (field, regex) ->
             val result = regex.find(component.string)?.groups ?: return@forEach
             val extractedAmount = result["amount"]?.value?.toIntOrNull() ?: 1

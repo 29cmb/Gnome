@@ -4,7 +4,6 @@ import dev.isxander.yacl3.api.OptionDescription
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.Style
 import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
@@ -14,6 +13,7 @@ import xyz.devcmb.gnome.isOnFishing
 import xyz.devcmb.gnome.isOnIsland
 import xyz.devcmb.gnome.mixin.BossEventAccessor
 import xyz.devcmb.gnome.sendMessage
+import xyz.devcmb.gnome.withBold
 import xyz.devcmb.gnome.withFont
 import kotlin.reflect.KMutableProperty0
 
@@ -24,13 +24,13 @@ class DayNightDetection : GnomeFeature {
         Component.literal("Sends a message in chat and plays a sound when it becomes either night or day"),
         Component.empty(),
         Component.literal("Plays a ")
-            .append(Component.literal("Ponder").withStyle(Style.EMPTY.withBold(true)))
+            .append(Component.literal("Ponder").withBold(true))
             .append(Component.literal(" goat horn when it becomes "))
-            .append(Component.literal("day").withStyle(Style.EMPTY.withBold(true))),
+            .append(Component.literal("day").withBold(true)),
         Component.literal("Plays a ")
-            .append(Component.literal("Sing").withStyle(Style.EMPTY.withBold(true)))
+            .append(Component.literal("Sing").withBold(true))
             .append(Component.literal(" goat horn when it becomes "))
-            .append(Component.literal("night").withStyle(Style.EMPTY.withBold(true)))
+            .append(Component.literal("night").withBold(true))
     )
     override val enabledProperty: KMutableProperty0<Boolean> = Config.values::dayNightDetectionEnabled
 

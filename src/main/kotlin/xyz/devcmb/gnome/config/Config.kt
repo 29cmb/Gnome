@@ -11,10 +11,10 @@ import dev.isxander.yacl3.dsl.tickBox
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.Style
 import net.minecraft.resources.Identifier
 import xyz.devcmb.gnome.Gnome
 import xyz.devcmb.gnome.feature.SessionStats
+import xyz.devcmb.gnome.withBold
 
 class Config {
     // Day/Night Detection
@@ -109,10 +109,10 @@ class Config {
                             Component.literal("Changes what the statistics feature tracks"),
                             Component.empty(),
                             Component.empty()
-                                .append(Component.literal("Amounts mode").withStyle(Style.EMPTY.withBold(true)))
+                                .append(Component.literal("Amounts mode").withBold(true))
                                 .append(Component.literal(" tracks the amount of items you fish up. For example, if you caught 4 pearls in one catch, the number will increase by 4.")),
                             Component.empty()
-                                .append(Component.literal("Catches mode").withStyle(Style.EMPTY.withBold(true)))
+                                .append(Component.literal("Catches mode").withBold(true))
                                 .append(Component.literal(" tracks the amount of catches you do. For example, if you caught 4 pearls in one catch, the number will only increase by 1."))
                         ))
                         binding(values::sessionStatsTrackingMode, SessionStats.TrackingMode.AMOUNTS)
