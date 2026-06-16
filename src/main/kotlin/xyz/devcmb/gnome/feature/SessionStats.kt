@@ -54,7 +54,12 @@ class SessionStats : GnomeFeature {
         regexValues.forEach { (field, regex) ->
             val result = regex.find(component.string)?.groups ?: return@forEach
             val extractedAmount = result["amount"]?.value?.toIntOrNull() ?: 1
-            val amount = Config.values.sessionStatsTrackingMode.calculate(extractedAmount)
+
+            // always use the XP amount regardless of mode
+            val amount =
+                if(field == ::sessionXP) extractedAmount
+                else Config.values.sessionStatsTrackingMode.calculate(extractedAmount)
+
             field.set(field.get() + amount)
         }
 
