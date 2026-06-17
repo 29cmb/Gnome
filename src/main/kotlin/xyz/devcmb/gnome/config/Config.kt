@@ -33,7 +33,9 @@ class Config {
     @SerialEntry
     var sessionStatsEnabled: Boolean = true
     @SerialEntry
-    var sessionStatsTrackingMode: SessionStats.TrackingMode = SessionStats.TrackingMode.AMOUNTS
+    var sessionStatsTrackingMode: SessionStats.StatTrackingMode = SessionStats.StatTrackingMode.AMOUNTS
+    @SerialEntry
+    var sessionStatsPearlTrackingMode: SessionStats.PearlTrackingMode = SessionStats.PearlTrackingMode.CATCHES
 
     companion object {
         val handler: ConfigClassHandler<Config> = ConfigClassHandler.createBuilder(Config::class.java)
@@ -104,7 +106,7 @@ class Config {
                     tooltip(Component.literal("Configuration for the Session Stats feature"))
 
                     options.register("tracking_mode") {
-                        name(Component.literal("Tracking Mode"))
+                        name(Component.literal("Stat Tracking Mode"))
                         description(OptionDescription.of(
                             Component.literal("Changes what the statistics feature tracks"),
                             Component.empty(),
@@ -115,8 +117,28 @@ class Config {
                                 .append(Component.literal("Catches mode").withBold(true))
                                 .append(Component.literal(" tracks the amount of catches you do. For example, if you caught 4 pearls in one catch, the number will only increase by 1."))
                         ))
-                        binding(values::sessionStatsTrackingMode, SessionStats.TrackingMode.AMOUNTS)
-                        controller(enumDropdown<SessionStats.TrackingMode> {
+                        binding(values::sessionStatsTrackingMode, SessionStats.StatTrackingMode.AMOUNTS)
+                        controller(enumDropdown<SessionStats.StatTrackingMode> {
+                            Component.literal(it.configName)
+                        })
+                    }
+
+                    options.register("pearl_tracking_mode") {
+                        name(Component.literal("Pearl Tracking Mode"))
+                        binding(values::sessionStatsPearlTrackingMode, SessionStats.PearlTrackingMode.CATCHES)
+                        description(OptionDescription.of(
+                            Component.literal("Changes what the pearl tracker is in relation to"),
+                            Component.empty(),
+                            Component.empty()
+                                .append(Component.literal("Catches mode").withBold(true))
+                                .append(Component.literal(" tracks the amount of total pearl catches, regardless of tier. If you fish up 4 pristines and 4 polished, it will increase by 8.")),
+                            Component.empty(),
+                            Component.empty()
+                                .append(Component.literal("For each of the "))
+                                .append(Component.literal("pearl tiers").withBold(true))
+                                .append(Component.literal(", the mode tracks your pearls in relation to that tier. If you're on pristine mode and you fish up 4 pristines, 2 polished, and 3 rough, it will display 4.23 because a polished is 1/10th of a pristine, and a rough is 1/100th."))
+                        ))
+                        controller(enumDropdown {
                             Component.literal(it.configName)
                         })
                     }

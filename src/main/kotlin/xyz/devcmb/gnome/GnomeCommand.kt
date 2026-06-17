@@ -13,9 +13,7 @@ object GnomeCommand {
                 literal("reset") {
                     executes {
                         val feature = Gnome.getFeature<SessionStats>()
-                        feature.regexValues.forEach {
-                            it.first.set(0)
-                        }
+                        feature.trackers.forEach { it.handler.reset() }
 
                         Minecraft.getInstance().sendMessage(
                             Component.literal("Reset session stats successfully!").withColor(0x2bfb6f)

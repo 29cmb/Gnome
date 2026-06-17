@@ -17,6 +17,8 @@ import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.concurrent.CompletableFuture
 
 // stealing from pe3ep part 1
@@ -69,6 +71,7 @@ fun isOnFishing(): Boolean {
  * }
  * ```
  */
+@Suppress("unused")
 class Command(
     name: String, block: Builder.() -> Unit
 ) {
@@ -159,4 +162,11 @@ class Command(
             argument(name, StringArgumentType.string(), block)
         }
     }
+}
+
+fun Double.round2Places(): String {
+    return BigDecimal(this.toString())
+        .setScale(2, RoundingMode.HALF_UP)
+        .stripTrailingZeros()
+        .toPlainString()
 }
