@@ -2,29 +2,49 @@
 # Gnome
 A utility mod for [MCC Island](https://mccisland.net) fishers
 
-### Installation
+## Installation
 For stable builds, a jar file for the latest version can be found in the [releases tab](https://github.com/29cmb/Gnome/releases)
 
 The latest build of the mod can always be found in the [actions tab](https://github.com/29cmb/Gnome/actions)
 
-### Requirements
+## Requirements
 1. Minecraft [Fabric](https://fabricmc.net/) v26.1.2
 2. [Yet Another Config Library](https://modrinth.com/mod/yacl) v3.9.4 for fabric
 3. Any version of [Fabric Language Kotlin](https://modrinth.com/mod/fabric-language-kotlin)
 
-### Features
-- Day/Night notifications
-  - This plays a **Ponder** goat horn when it becomes day
-  - And when it becomes night, it plays a **Sing** goat horn
-- A loud sound when you're about to be kicked to limbo for being AFK
-- A section above the hotbar displaying session statistics. This displays:
-    - Fish
-    - Pearls
-    - Spirits
-    - Treasure
-    - XP
+## Features
+### Day/Night notifications
+Gives a chat notification and sound when it becomes night time
+![night_notification.png](docs/night_notification.png)
 
-![Hotbar](./docs/hotbar.png)
+This plays a [**Ponder**](https://minecraft.wiki/w/File:Goat_Horn_Call0.ogg) goat horn when it becomes day, and a [**Sing**](https://minecraft.wiki/w/File:Goat_Horn_Call1.ogg) goat horn when it becomes night
+
+In the mod config, you can disable either or both of them.
+
+### Fishing Session Statistics
+A section above the hotbar that displays statistics about your current session. Among these are:
+- Fish
+- Pearls
+- Treasure
+- Spirits
+- XP
+
+> [!TIP]
+> You can reset these statistics using the command `/gnome session reset`
+
+There are 2 stat tracking modes
+1. Catches Tracking - Tracks the amount of times you've caught a certain type. Ex: 4x pristine only increases the counter by 1
+2. Amounts Tracking - Tracks the amount of items you've caught of a certain type. Ex: 4x pristine increases the counter 4 times
+
+And for specifically pearls, you can configure what the counter shows
+1. Catches - Counts all pearls as 1 point for the counter
+2. Rough, Polished, Pristine - Counts each pearl tier relative to the selected mode. Ex: On pristine mode, a rough pearl makes the counter increase by 0.01, and a polished makes it increase by 0.1
+
+![hotbar](docs/hotbar.png)
+
+### Misc
+- A loud sound when you're about to be kicked to limbo for being AFK
+
 
 ---
-###### Not affiliated with or endorsed by Mojang AB or Noxcrew
+###### Not affiliated with or endorsed by Mojang or Noxcrew!
