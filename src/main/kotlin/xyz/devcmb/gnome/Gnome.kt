@@ -8,6 +8,7 @@ import xyz.devcmb.gnome.config.Config
 import xyz.devcmb.gnome.feature.DayNightDetection
 import xyz.devcmb.gnome.feature.GnomeFeature
 import xyz.devcmb.gnome.feature.LimboKickWarning
+import xyz.devcmb.gnome.feature.PlobbyAdMute
 import xyz.devcmb.gnome.feature.SessionStats
 
 object Gnome : ModInitializer {
@@ -21,6 +22,7 @@ object Gnome : ModInitializer {
 		registerFeature(DayNightDetection())
 		registerFeature(LimboKickWarning())
 		registerFeature(SessionStats())
+		registerFeature(PlobbyAdMute())
 
 		ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
 			GnomeCommand.register(dispatcher)

@@ -37,6 +37,10 @@ class Config {
     @SerialEntry
     var sessionStatsPearlTrackingMode: SessionStats.PearlTrackingMode = SessionStats.PearlTrackingMode.CATCHES
 
+    // Plobby Ad Mute
+    @SerialEntry
+    var plobbyAdMuteEnabled: Boolean = false
+
     companion object {
         val handler: ConfigClassHandler<Config> = ConfigClassHandler.createBuilder(Config::class.java)
             .id(Identifier.fromNamespaceAndPath(Gnome.MOD_ID, "config"))
