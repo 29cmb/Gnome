@@ -3,7 +3,7 @@
 A utility mod for [MCC Island](https://mccisland.net) fishers
 
 ## Installation
-For stable builds, a jar file for the latest version can be found in the [releases tab](https://github.com/29cmb/Gnome/releases)
+For stable builds, you can get the mod over on [modrinth](https://modrinth.com/mod/gnome) or in the [releases tab](https://github.com/29cmb/Gnome/releases)
 
 The latest build of the mod can always be found in the [actions tab](https://github.com/29cmb/Gnome/actions)
 
