@@ -15,6 +15,9 @@ The latest build of the mod can always be found in the [actions tab](https://git
 ## Features
 ### Day/Night notifications
 Gives a chat notification and sound when it becomes night time
+
+![day_notification.png](docs/day_notification.png)
+
 ![night_notification.png](docs/night_notification.png)
 
 This plays a [**Ponder**](https://minecraft.wiki/w/File:Goat_Horn_Call0.ogg) goat horn when it becomes day, and a [**Sing**](https://minecraft.wiki/w/File:Goat_Horn_Call1.ogg) goat horn when it becomes night
