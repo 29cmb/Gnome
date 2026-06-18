@@ -24,6 +24,13 @@ This plays a [**Ponder**](https://minecraft.wiki/w/File:Goat_Horn_Call0.ogg) goa
 
 In the mod config, you can disable either or both of them.
 
+### Currents notifications
+Sends a chat message and plays a sound when the currents change at the top of every hour
+
+This plays a [**Seek**](https://minecraft.wiki/w/File:Goat_Horn_Call2.ogg) goat horn
+
+![currents_notification.png](docs/currents_notification.png)
+
 ### Fishing Session Statistics
 A section above the hotbar that displays statistics about your current session. Among these are:
 - Fish
@@ -47,6 +54,7 @@ And for specifically pearls, you can configure what the counter shows
 
 ### Misc
 - A loud sound when you're about to be kicked to limbo for being AFK
+- An option to hide private lobby advertisements
 
 
 ---

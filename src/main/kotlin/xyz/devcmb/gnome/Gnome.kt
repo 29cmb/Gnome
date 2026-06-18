@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import xyz.devcmb.gnome.config.Config
+import xyz.devcmb.gnome.feature.CurrentsNotification
 import xyz.devcmb.gnome.feature.DayNightDetection
 import xyz.devcmb.gnome.feature.GnomeFeature
 import xyz.devcmb.gnome.feature.LimboKickWarning
@@ -23,6 +24,7 @@ object Gnome : ModInitializer {
 		registerFeature(LimboKickWarning())
 		registerFeature(SessionStats())
 		registerFeature(PlobbyAdMute())
+		registerFeature(CurrentsNotification())
 
 		ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
 			GnomeCommand.register(dispatcher)

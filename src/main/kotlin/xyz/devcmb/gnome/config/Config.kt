@@ -41,6 +41,10 @@ class Config {
     @SerialEntry
     var plobbyAdMuteEnabled: Boolean = false
 
+    // Currents Notification
+    @SerialEntry
+    var currentsNotificationEnabled: Boolean = true
+
     companion object {
         val handler: ConfigClassHandler<Config> = ConfigClassHandler.createBuilder(Config::class.java)
             .id(Identifier.fromNamespaceAndPath(Gnome.MOD_ID, "config"))

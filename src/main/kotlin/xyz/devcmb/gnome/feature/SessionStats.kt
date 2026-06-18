@@ -99,9 +99,9 @@ class SessionStats : GnomeFeature {
             override fun reset() {
                 xp = 0
             }
-        }, lazy {
-            (215 to if(hasXPBoost) 30 else 43)
-        })
+        }) {
+            (215 to if (hasXPBoost) 30 else 43)
+        }
     )
 
     fun onChatMessage(component: Component) {
@@ -168,10 +168,10 @@ class SessionStats : GnomeFeature {
     class FishingStatTracker(
         val regex: Regex,
         val handler: FishingStatHandler,
-        val uiOffset: Lazy<Pair<Int, Int>>
+        val uiOffset: () -> Pair<Int, Int>,
     ) {
         constructor(regex: Regex, handler: FishingStatHandler, uiOffset: Pair<Int, Int>)
-            : this(regex, handler, lazy { uiOffset })
+            : this(regex, handler, { uiOffset })
 
         fun render(graphics: GuiGraphicsExtractor) {
             val text = handler.formatUIText()
@@ -183,7 +183,7 @@ class SessionStats : GnomeFeature {
                 )
             )
 
-            val offset by uiOffset
+            val offset = uiOffset()
 
             graphics.text(
                 Minecraft.getInstance().font,
