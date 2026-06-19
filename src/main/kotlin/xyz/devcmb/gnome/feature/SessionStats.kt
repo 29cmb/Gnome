@@ -52,8 +52,8 @@ class SessionStats : GnomeFeature {
     }
 
     val trackers: ArrayList<FishingStatTracker> = arrayListOf(
-        FishingStatTracker(fishRegex, GenericFishingStatHandler(), (33 to 0)),
-        FishingStatTracker(pearlRegex, object : FishingStatHandler {
+        FishingStatTracker("fish", fishRegex, GenericFishingStatHandler(), (33 to 0)),
+        FishingStatTracker("pearls", pearlRegex, object : FishingStatHandler {
             val caughtPearls: HashMap<PearlType, Int> = hashMapOf(
                 PearlType.ROUGH to 0,
                 PearlType.POLISHED to 0,
@@ -83,9 +83,9 @@ class SessionStats : GnomeFeature {
                 caughtPearls.replaceAll { _, _ -> 0 }
             }
         }, (75 to 0)),
-        FishingStatTracker(treasureRegex, GenericFishingStatHandler(), (132 to 0)),
-        FishingStatTracker(spiritRegex, GenericFishingStatHandler(), (173 to 0)),
-        FishingStatTracker(xpRegex, object : FishingStatHandler {
+        FishingStatTracker("treasure", treasureRegex, GenericFishingStatHandler(), (132 to 0)),
+        FishingStatTracker("spirits", spiritRegex, GenericFishingStatHandler(), (173 to 0)),
+        FishingStatTracker("xp", xpRegex, object : FishingStatHandler {
             var xp: Int = 0
             override fun handle(result: MatchGroupCollection) {
                 val amount = result["amount"]?.value?.toInt() ?: 0
@@ -166,12 +166,13 @@ class SessionStats : GnomeFeature {
     }
 
     class FishingStatTracker(
+        val id: String,
         val regex: Regex,
         val handler: FishingStatHandler,
         val uiOffset: () -> Pair<Int, Int>,
     ) {
-        constructor(regex: Regex, handler: FishingStatHandler, uiOffset: Pair<Int, Int>)
-            : this(regex, handler, { uiOffset })
+        constructor(id: String, regex: Regex, handler: FishingStatHandler, uiOffset: Pair<Int, Int>)
+            : this(id, regex, handler, { uiOffset })
 
         fun render(graphics: GuiGraphicsExtractor) {
             val text = handler.formatUIText()
