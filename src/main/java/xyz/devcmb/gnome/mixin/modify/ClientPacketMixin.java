@@ -1,4 +1,4 @@
-package xyz.devcmb.gnome.mixin;
+package xyz.devcmb.gnome.mixin.modify;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;

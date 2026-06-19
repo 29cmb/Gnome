@@ -1,4 +1,4 @@
-package xyz.devcmb.gnome.mixin;
+package xyz.devcmb.gnome.mixin.accessor;
 
 import net.minecraft.client.gui.components.BossHealthOverlay;
 import net.minecraft.client.gui.components.LerpingBossEvent;

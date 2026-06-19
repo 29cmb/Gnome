@@ -11,7 +11,7 @@ import net.minecraft.sounds.SoundSource
 import xyz.devcmb.gnome.config.Config
 import xyz.devcmb.gnome.isOnFishing
 import xyz.devcmb.gnome.isOnIsland
-import xyz.devcmb.gnome.mixin.BossEventAccessor
+import xyz.devcmb.gnome.mixin.accessor.BossEventAccessor
 import xyz.devcmb.gnome.sendMessage
 import xyz.devcmb.gnome.withBold
 import xyz.devcmb.gnome.withFont

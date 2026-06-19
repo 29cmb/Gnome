@@ -6,7 +6,7 @@ import net.minecraft.network.chat.FontDescription
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
 import net.minecraft.resources.Identifier
-import xyz.devcmb.gnome.mixin.TabListAccessor
+import xyz.devcmb.gnome.mixin.accessor.TabListAccessor
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.ArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
@@ -17,6 +17,9 @@ import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.TooltipFlag
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.concurrent.CompletableFuture
@@ -169,4 +172,17 @@ fun Double.round2Places(): String {
         .setScale(2, RoundingMode.HALF_UP)
         .stripTrailingZeros()
         .toPlainString()
+}
+
+// stealing from pe3ep part 3
+// https://github.com/pe3ep/Trident/blob/master/src/main/kotlin/cc/pe3epwithyou/trident/utils/extensions/ItemStackExtensions.kt
+
+fun ItemStack.getLore(): List<Component> {
+    val player = Minecraft.getInstance().player ?: return emptyList()
+
+    return this.getTooltipLines(
+        Item.TooltipContext.EMPTY,
+        player,
+        TooltipFlag.Default.NORMAL
+    )
 }

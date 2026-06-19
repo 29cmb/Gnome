@@ -1,8 +1,7 @@
-package xyz.devcmb.gnome.mixin;
+package xyz.devcmb.gnome.mixin.modify;
 
 import net.minecraft.client.gui.Gui;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import xyz.devcmb.gnome.UtilKt;

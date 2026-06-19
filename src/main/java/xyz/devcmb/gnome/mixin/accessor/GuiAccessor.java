@@ -1,4 +1,4 @@
-package xyz.devcmb.gnome.mixin;
+package xyz.devcmb.gnome.mixin.accessor;
 
 import net.minecraft.client.gui.Gui;
 import net.minecraft.network.chat.Component;

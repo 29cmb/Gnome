@@ -45,6 +45,10 @@ class Config {
     @SerialEntry
     var currentsNotificationEnabled: Boolean = true
 
+    // Island Completion
+    @SerialEntry
+    var islandCompletionEnabled: Boolean = true
+
     companion object {
         val handler: ConfigClassHandler<Config> = ConfigClassHandler.createBuilder(Config::class.java)
             .id(Identifier.fromNamespaceAndPath(Gnome.MOD_ID, "config"))

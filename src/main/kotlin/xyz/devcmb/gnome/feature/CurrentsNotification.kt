@@ -17,7 +17,7 @@ import java.time.LocalDateTime
 import kotlin.reflect.KMutableProperty0
 
 class CurrentsNotification: GnomeFeature {
-    override val id: String = "currentsNotification"
+    override val id: String = "currents_notification"
     override val name: String = "Current Notification"
     override val description: OptionDescription = OptionDescription.of(
         Component.literal("Gives a chat message and sound when currents change at the top of every hour"),

@@ -15,7 +15,7 @@ import xyz.devcmb.gnome.Gnome
 import xyz.devcmb.gnome.data.PearlType
 import xyz.devcmb.gnome.isOnFishing
 import xyz.devcmb.gnome.isOnIsland
-import xyz.devcmb.gnome.mixin.GuiAccessor
+import xyz.devcmb.gnome.mixin.accessor.GuiAccessor
 import xyz.devcmb.gnome.round2Places
 import xyz.devcmb.gnome.withFont
 import kotlin.reflect.KMutableProperty0

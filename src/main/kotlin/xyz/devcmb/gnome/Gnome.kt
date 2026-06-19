@@ -8,6 +8,7 @@ import xyz.devcmb.gnome.config.Config
 import xyz.devcmb.gnome.feature.CurrentsNotification
 import xyz.devcmb.gnome.feature.DayNightDetection
 import xyz.devcmb.gnome.feature.GnomeFeature
+import xyz.devcmb.gnome.feature.IslandCompletion
 import xyz.devcmb.gnome.feature.LimboKickWarning
 import xyz.devcmb.gnome.feature.PlobbyAdMute
 import xyz.devcmb.gnome.feature.SessionStats
@@ -25,6 +26,7 @@ object Gnome : ModInitializer {
 		registerFeature(SessionStats())
 		registerFeature(PlobbyAdMute())
 		registerFeature(CurrentsNotification())
+		registerFeature(IslandCompletion())
 
 		ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
 			GnomeCommand.register(dispatcher)
