@@ -26,29 +26,6 @@ repositories {
 	maven("https://maven.terraformersmc.com/") {
 		name = "Terraformers"
 	}
-
-	maven("https://maven.noxcrew.com/public") {
-		name = "Noxcrew Public"
-	}
-
-	maven("https://repo.papermc.io/repository/maven-public/") {
-		name = "papermc"
-	}
-
-	maven("https://maven.enginehub.org/repo/") {
-		name = "EngineHub"
-	}
-
-	exclusiveContent {
-		forRepository {
-			maven("https://api.modrinth.com/maven") {
-				name = "Modrinth"
-			}
-		}
-		filter {
-			includeGroup("maven.modrinth")
-		}
-	}
 }
 
 dependencies {
@@ -59,7 +36,6 @@ dependencies {
 	// Dependencies
 	implementation("dev.isxander:yet-another-config-lib:3.9.4+26.1-fabric")
 	implementation("com.terraformersmc:modmenu:18.0.0-beta.1")
-	implementation("com.noxcrew.noxesium:fabric:3.1.0")
 	runtimeOnly("me.djtheredstoner:DevAuth-fabric:1.2.2")
 
 	// Fabric API. This is technically optional, but you probably want it anyway.

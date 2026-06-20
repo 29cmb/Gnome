@@ -10,12 +10,14 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
 import net.minecraft.util.ARGB
+import net.minecraft.world.entity.HumanoidArm
 import xyz.devcmb.gnome.config.Config
 import xyz.devcmb.gnome.Gnome
 import xyz.devcmb.gnome.data.PearlType
 import xyz.devcmb.gnome.util.isOnFishing
 import xyz.devcmb.gnome.util.isOnIsland
 import xyz.devcmb.gnome.mixin.accessor.GuiAccessor
+import xyz.devcmb.gnome.util.Font
 import xyz.devcmb.gnome.util.round2Places
 import xyz.devcmb.gnome.util.withFont
 import kotlin.reflect.KMutableProperty0
@@ -28,7 +30,6 @@ class SessionStats : GnomeFeature {
     )
     override val enabledProperty: KMutableProperty0<Boolean> = Config.values::sessionStatsEnabled
 
-    val fishRegex: Regex = Regex("You caught: \\[[A-z, ]*[\uE0D2\uE0D8\uE0D6\uE0D0].*] *(?:x(?<amount>[0-9]*))?")
     val pearlRegex: Regex = Regex("You caught: \\[(?<type>[A-z]*) Pearl] *(?:x(?<amount>[0-9]*))?")
     val spiritRegex: Regex = Regex("You caught: \\[[A-z, ]* Spirit] *(?:x(?<amount>[0-9]*))?")
     val treasureRegex: Regex = Regex("You caught: \\[[A-z]* Treasure] *(?:x(?<amount>[0-9]*))?")
@@ -39,9 +40,9 @@ class SessionStats : GnomeFeature {
             val actionBar = (Minecraft.getInstance().gui as GuiAccessor).`gnome$getOverlayMessageString`()
                 ?: Component.empty()
 
-            return actionBar.string.contains("\uE391")
-                || actionBar.string.contains("\uE392")
-                || actionBar.string.contains("\uE393")
+            return actionBar.string.contains(Font.getGlyphString("_fonts/icon/xp_bonus.png"))
+                || actionBar.string.contains(Font.getGlyphString("_fonts/icon/xp_bonus_20.png"))
+                || actionBar.string.contains(Font.getGlyphString("_fonts/icon/xp_bonus_50.png"))
         }
 
     override fun init() {
@@ -51,9 +52,20 @@ class SessionStats : GnomeFeature {
         )
     }
 
-    // TODO: Replace with the noxesium stats (im way too tired to add this now)
+    // I wanted to replace this with noxesium stats, but theres a problem
+    // The fishing stat double-counts when glitched rod is triggered
+    // That and i'd have to rewrite even more of this logic
     val trackers: ArrayList<FishingStatTracker> = arrayListOf(
-        FishingStatTracker("fish", fishRegex, GenericFishingStatHandler(), (33 to 0)),
+        // its in here to prevent a NPE since the font isn't loaded yet
+        FishingStatTracker("fish", {
+            Regex("You caught: \\[[A-z, ]*[" +
+                    Font.getGlyphString("_fonts/icon/fishing/average_bubble.png") +
+                    Font.getGlyphString("_fonts/icon/fishing/large_bubble.png") +
+                    Font.getGlyphString("_fonts/icon/fishing/massive_bubble.png") +
+                    Font.getGlyphString("_fonts/icon/fishing/gargantuan_bubble.png") +
+            "].*] *(?:x(?<amount>[0-9]*))?")
+        }, GenericFishingStatHandler(), (33 to 0)),
+
         FishingStatTracker("pearls", pearlRegex, object : FishingStatHandler {
             val caughtPearls: HashMap<PearlType, Int> = hashMapOf(
                 PearlType.ROUGH to 0,
@@ -101,13 +113,14 @@ class SessionStats : GnomeFeature {
                 xp = 0
             }
         }) {
-            (215 to if (hasXPBoost) 30 else 43)
+            val hand = Minecraft.getInstance().player?.mainArm?.opposite ?: HumanoidArm.RIGHT
+            (if(hand == HumanoidArm.LEFT) 215 else 243) to (if (hasXPBoost) 30 else 43)
         }
     )
 
     fun onChatMessage(component: Component) {
         trackers.forEach { tracker ->
-            val result = tracker.regex.find(component.string)?.groups ?: return@forEach
+            val result = tracker.regex().find(component.string)?.groups ?: return@forEach
             tracker.handler.handle(result)
         }
     }
@@ -128,10 +141,11 @@ class SessionStats : GnomeFeature {
                 181, 16
             )
 
+            val hand = Minecraft.getInstance().player?.mainArm?.opposite ?: HumanoidArm.RIGHT
             graphics.blit(
                 RenderPipelines.GUI_TEXTURED,
                 Identifier.fromNamespaceAndPath(Gnome.MOD_ID, "textures/gui/xp_amount.png"),
-                ((graphics.guiWidth() - 180) / 2) + 182, graphics.guiHeight() - (if(hasXPBoost) 30 else 17),
+                ((graphics.guiWidth() - 180) / 2) + (if(hand == HumanoidArm.LEFT) 182 else 211), graphics.guiHeight() - (if(hasXPBoost) 30 else 17),
                 0f, 0f,
                 39, 16,
                 39, 16
@@ -168,11 +182,17 @@ class SessionStats : GnomeFeature {
 
     class FishingStatTracker(
         val id: String,
-        val regex: Regex,
+        val regex: () -> Regex,
         val handler: FishingStatHandler,
         val uiOffset: () -> Pair<Int, Int>,
     ) {
         constructor(id: String, regex: Regex, handler: FishingStatHandler, uiOffset: Pair<Int, Int>)
+            : this(id, { regex }, handler, { uiOffset })
+
+        constructor(id: String, regex: Regex, handler: FishingStatHandler, uiOffset: () -> Pair<Int, Int>)
+            : this(id, { regex }, handler, uiOffset)
+
+        constructor(id: String, regex: () -> Regex, handler: FishingStatHandler, uiOffset: Pair<Int, Int>)
             : this(id, regex, handler, { uiOffset })
 
         fun render(graphics: GuiGraphicsExtractor) {

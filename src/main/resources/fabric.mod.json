@@ -23,9 +23,6 @@
 		],
 		"modmenu": [
 			"xyz.devcmb.gnome.lib.GnomeModMenuImpl"
-		],
-		"noxesium": [
-			"xyz.devcmb.gnome.lib.GnomeNoxesiumEntrypoint"
 		]
 	},
 	"mixins": [
