@@ -13,11 +13,11 @@ import net.minecraft.util.ARGB
 import xyz.devcmb.gnome.config.Config
 import xyz.devcmb.gnome.Gnome
 import xyz.devcmb.gnome.data.PearlType
-import xyz.devcmb.gnome.isOnFishing
-import xyz.devcmb.gnome.isOnIsland
+import xyz.devcmb.gnome.util.isOnFishing
+import xyz.devcmb.gnome.util.isOnIsland
 import xyz.devcmb.gnome.mixin.accessor.GuiAccessor
-import xyz.devcmb.gnome.round2Places
-import xyz.devcmb.gnome.withFont
+import xyz.devcmb.gnome.util.round2Places
+import xyz.devcmb.gnome.util.withFont
 import kotlin.reflect.KMutableProperty0
 
 class SessionStats : GnomeFeature {
@@ -51,6 +51,7 @@ class SessionStats : GnomeFeature {
         )
     }
 
+    // TODO: Replace with the noxesium stats (im way too tired to add this now)
     val trackers: ArrayList<FishingStatTracker> = arrayListOf(
         FishingStatTracker("fish", fishRegex, GenericFishingStatHandler(), (33 to 0)),
         FishingStatTracker("pearls", pearlRegex, object : FishingStatHandler {

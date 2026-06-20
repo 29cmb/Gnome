@@ -10,8 +10,8 @@ import net.minecraft.resources.Identifier
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.Items
 import xyz.devcmb.gnome.config.Config
-import xyz.devcmb.gnome.getLore
-import xyz.devcmb.gnome.isOnIsland
+import xyz.devcmb.gnome.util.getLore
+import xyz.devcmb.gnome.util.isOnIsland
 import kotlin.reflect.KMutableProperty0
 
 class IslandCompletion : GnomeFeature {

@@ -8,7 +8,8 @@
 		"modify.GuiMixin",
 		"accessor.GuiAccessor",
 		"modify.ClientPacketMixin",
-		"modify.AbstractContainerScreenMixin"
+		"modify.AbstractContainerScreenMixin",
+		"modify.BitmapProviderMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

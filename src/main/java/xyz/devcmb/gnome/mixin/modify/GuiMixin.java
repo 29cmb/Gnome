@@ -4,7 +4,7 @@ import net.minecraft.client.gui.Gui;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import xyz.devcmb.gnome.UtilKt;
+import xyz.devcmb.gnome.util.UtilKt;
 
 @Mixin(Gui.class)
 public class GuiMixin {

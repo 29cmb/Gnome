@@ -8,8 +8,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.devcmb.gnome.Gnome;
-import xyz.devcmb.gnome.UtilKt;
 import xyz.devcmb.gnome.feature.SessionStats;
+import xyz.devcmb.gnome.util.UtilKt;
 
 @Mixin(ClientPacketListener.class)
 public class ClientPacketMixin {

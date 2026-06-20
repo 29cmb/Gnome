@@ -3,15 +3,14 @@ package xyz.devcmb.gnome.feature
 import dev.isxander.yacl3.api.OptionDescription
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import xyz.devcmb.gnome.config.Config
-import xyz.devcmb.gnome.isOnFishing
-import xyz.devcmb.gnome.isOnIsland
-import xyz.devcmb.gnome.sendMessage
-import xyz.devcmb.gnome.withBold
-import xyz.devcmb.gnome.withFont
+import xyz.devcmb.gnome.util.Font
+import xyz.devcmb.gnome.util.isOnFishing
+import xyz.devcmb.gnome.util.isOnIsland
+import xyz.devcmb.gnome.util.sendMessage
+import xyz.devcmb.gnome.util.withBold
 import java.time.Instant
 import java.time.LocalDateTime
 import kotlin.reflect.KMutableProperty0
@@ -43,12 +42,9 @@ class CurrentsNotification: GnomeFeature {
 
                 client.sendMessage(Component.empty().append(
                     Component.literal("(")
-                        .append(
-                            // wfd icon
-                            Component.literal("\uE0EC")
-                                .withFont(Identifier.fromNamespaceAndPath("mcc", "icon"))
-                                .withColor(0xFFFFFF)
-                        )
+                        .append(Font.getGlyph(
+                            "_fonts/icon/fishing/wayfinder_data.png"
+                        ).withoutShadow().withColor(0xFFFFFF))
                         .append(Component.literal(") The currents have changed!"))
                 ).withColor(0x59ff58))
                 client.level?.playPlayerSound(SoundEvents.GOAT_HORN_SOUND_VARIANTS[2].value(), SoundSource.UI, 1f, 1f)

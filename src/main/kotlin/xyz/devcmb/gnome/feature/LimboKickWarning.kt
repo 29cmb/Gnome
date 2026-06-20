@@ -8,7 +8,7 @@ import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
 import xyz.devcmb.gnome.config.Config
-import xyz.devcmb.gnome.isOnIsland
+import xyz.devcmb.gnome.util.isOnIsland
 import java.util.Optional
 import kotlin.reflect.KMutableProperty0
 

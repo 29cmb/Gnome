@@ -22,7 +22,10 @@
 			}
 		],
 		"modmenu": [
-			"xyz.devcmb.gnome.config.GnomeModMenuImpl"
+			"xyz.devcmb.gnome.lib.GnomeModMenuImpl"
+		],
+		"noxesium": [
+			"xyz.devcmb.gnome.lib.GnomeNoxesiumEntrypoint"
 		]
 	},
 	"mixins": [
@@ -34,6 +37,7 @@
 		"java": ">=25",
 		"fabric-api": "*",
 		"fabric-language-kotlin": "*",
-		"yet_another_config_lib_v3": ">=3.9.4"
+		"yet_another_config_lib_v3": ">=3.9.4",
+		"noxesium": ">=3.1.0"
 	}
 }

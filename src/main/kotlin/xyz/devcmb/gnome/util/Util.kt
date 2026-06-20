@@ -1,4 +1,4 @@
-package xyz.devcmb.gnome
+package xyz.devcmb.gnome.util
 
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component

@@ -9,12 +9,13 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import xyz.devcmb.gnome.config.Config
-import xyz.devcmb.gnome.isOnFishing
-import xyz.devcmb.gnome.isOnIsland
+import xyz.devcmb.gnome.util.isOnFishing
+import xyz.devcmb.gnome.util.isOnIsland
 import xyz.devcmb.gnome.mixin.accessor.BossEventAccessor
-import xyz.devcmb.gnome.sendMessage
-import xyz.devcmb.gnome.withBold
-import xyz.devcmb.gnome.withFont
+import xyz.devcmb.gnome.util.Font
+import xyz.devcmb.gnome.util.sendMessage
+import xyz.devcmb.gnome.util.withBold
+import xyz.devcmb.gnome.util.withFont
 import kotlin.reflect.KMutableProperty0
 
 class DayNightDetection : GnomeFeature {
@@ -35,8 +36,14 @@ class DayNightDetection : GnomeFeature {
     override val enabledProperty: KMutableProperty0<Boolean> = Config.values::dayNightDetectionEnabled
 
     var currentTime: Time? = null
-    val dayGlyph: String = "\uE0EB"
-    val nightGlyph: String = "\uE0E9"
+    val dayGlyph: String
+        get() {
+            return Font.getGlyphString("_fonts/icon/fishing/time_sun.png")
+        }
+    val nightGlyph: String
+        get() {
+            return Font.getGlyphString("_fonts/icon/fishing/time_moon.png")
+        }
 
     override fun init() {
         ClientTickEvents.END_CLIENT_TICK.register { client ->

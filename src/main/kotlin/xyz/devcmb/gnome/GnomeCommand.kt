@@ -5,6 +5,8 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
 import xyz.devcmb.gnome.feature.SessionStats
+import xyz.devcmb.gnome.util.Command
+import xyz.devcmb.gnome.util.sendMessage
 
 object GnomeCommand {
     val sessionStats by lazy {
@@ -32,7 +34,7 @@ object GnomeCommand {
                         executes {
                             val stat = it.getArgument("stat", String::class.java)
                             val tracker = sessionStats.trackers.find { tracker -> tracker.id == stat }
-                            if(tracker == null) {
+                            if (tracker == null) {
                                 Minecraft.getInstance()
                                     .sendMessage(Component.literal("Invalid stat name!").withColor(0xff5555))
                                 return@executes

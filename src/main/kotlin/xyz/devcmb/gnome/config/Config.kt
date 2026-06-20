@@ -14,7 +14,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import xyz.devcmb.gnome.Gnome
 import xyz.devcmb.gnome.feature.SessionStats
-import xyz.devcmb.gnome.withBold
+import xyz.devcmb.gnome.util.withBold
 
 class Config {
     // Day/Night Detection
