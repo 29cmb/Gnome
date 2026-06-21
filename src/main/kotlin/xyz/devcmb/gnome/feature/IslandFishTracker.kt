@@ -76,21 +76,33 @@ class IslandFishTracker : GnomeFeature {
     }
 
     fun updateIslandCompletionState(items: List<ItemStack>) {
+        var changesFound = false
         items.forEach { item ->
             if(!item.`is`(Items.ECHO_SHARD)) return@forEach
 
             val island = Island.entries.find { item.itemName.string == it.islandName } ?: return@forEach
+            val currentData = island.getCompletionData()
+
+            val average = getCompletion(item, Regex("Average - (?<count>[0-9]*.)/18"))
+            val large = getCompletion(item, Regex("Large - (?<count>[0-9]*.)/18"))
+            val massive = getCompletion(item, Regex("Massive - (?<count>[0-9]*.)/18"))
+            val gargantuan = getCompletion(item, Regex("Gargantuan - (?<count>[0-9]*.)/18"))
+
+            if(
+                currentData.average != average
+                || currentData.large != large
+                || currentData.massive != massive
+                || currentData.gargantuan != gargantuan
+            ) changesFound = true
+
             island.updateCompletionData(
                 Config.CompletionData(
-                    getCompletion(item, Regex("Average - (?<count>[0-9]*.)/18")),
-                    getCompletion(item, Regex("Large - (?<count>[0-9]*.)/18")),
-                    getCompletion(item, Regex("Massive - (?<count>[0-9]*.)/18")),
-                    getCompletion(item, Regex("Gargantuan - (?<count>[0-9]*.)/18")),
+                    average, large, massive, gargantuan
                 )
             )
         }
 
-        Config.handler.save()
+        if(changesFound) Config.handler.save()
     }
 
     fun getCompletion(item: ItemStack, regex: Regex): Int {
