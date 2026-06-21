@@ -32,6 +32,4 @@ class LimboKickWarning : GnomeFeature {
         }
     }
 
-    override fun cleanup() {
-    }
 }

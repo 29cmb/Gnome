@@ -10,5 +10,4 @@ interface GnomeFeature {
     val enabledProperty: KMutableProperty0<Boolean>
 
     fun init()
-    fun cleanup()
 }

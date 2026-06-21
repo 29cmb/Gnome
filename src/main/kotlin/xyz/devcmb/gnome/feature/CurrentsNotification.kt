@@ -51,7 +51,4 @@ class CurrentsNotification: GnomeFeature {
             }
         }
     }
-
-    override fun cleanup() {
-    }
 }

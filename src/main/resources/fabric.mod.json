@@ -22,7 +22,7 @@
 			}
 		],
 		"modmenu": [
-			"xyz.devcmb.gnome.lib.GnomeModMenuImpl"
+          "xyz.devcmb.gnome.config.GnomeModMenuImpl"
 		]
 	},
 	"mixins": [

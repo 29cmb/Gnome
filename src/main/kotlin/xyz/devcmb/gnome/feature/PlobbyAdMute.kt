@@ -18,6 +18,4 @@ class PlobbyAdMute : GnomeFeature {
         }
     }
 
-    override fun cleanup() {
-    }
 }

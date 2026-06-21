@@ -8,19 +8,27 @@ import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.chat.Style
 import net.minecraft.resources.Identifier
 import net.minecraft.util.ARGB
 import net.minecraft.world.entity.HumanoidArm
 import xyz.devcmb.gnome.config.Config
 import xyz.devcmb.gnome.Gnome
+import xyz.devcmb.gnome.data.CatchType
 import xyz.devcmb.gnome.data.PearlType
+import xyz.devcmb.gnome.data.SpiritTier
+import xyz.devcmb.gnome.data.TreasureTier
 import xyz.devcmb.gnome.data.Weight
 import xyz.devcmb.gnome.util.isOnFishing
 import xyz.devcmb.gnome.util.isOnIsland
 import xyz.devcmb.gnome.mixin.accessor.GuiAccessor
 import xyz.devcmb.gnome.util.Font
+import xyz.devcmb.gnome.util.appendNewLine
 import xyz.devcmb.gnome.util.round2Places
 import xyz.devcmb.gnome.util.roundPlaces
+import xyz.devcmb.gnome.util.sendMessage
+import xyz.devcmb.gnome.util.texture
+import xyz.devcmb.gnome.util.withBold
 import xyz.devcmb.gnome.util.withFont
 import kotlin.reflect.KMutableProperty0
 
@@ -32,9 +40,6 @@ class SessionStats : GnomeFeature {
     )
     override val enabledProperty: KMutableProperty0<Boolean> = Config.values::sessionStatsEnabled
 
-    val pearlRegex: Regex = Regex("You caught: \\[(?<type>[A-z]*) Pearl] *(?:x(?<amount>[0-9]*))?")
-    val spiritRegex: Regex = Regex("You caught: \\[[A-z, ]* Spirit] *(?:x(?<amount>[0-9]*))?")
-    val treasureRegex: Regex = Regex("You caught: \\[[A-z]* Treasure] *(?:x(?<amount>[0-9]*))?")
     val xpRegex: Regex = Regex("You earned: (?<amount>[0-9]*) Island XP")
 
     val hasXPBoost: Boolean
@@ -67,13 +72,16 @@ class SessionStats : GnomeFeature {
     // That and i'd have to rewrite even more of this logic
     val trackers: ArrayList<FishingStatTracker> = arrayListOf(
         // its in here to prevent a NPE since the font isn't loaded yet
-        FishingStatTracker("fish", {
-            Regex("You caught: \\[[A-z, ]*[" +
-                Weight.entries.joinToString("") { it.glyph() } +
-            "].*] *(?:x(?<amount>[0-9]*))?")
-        }, GenericFishingStatHandler(), (33 to 0)),
+        FishingStatTracker("fish", CatchType.FISH.regex, GenericTieredStatHandler(Weight::class.java) { result, stats ->
+            val extractedAmount = result["amount"]?.value?.toIntOrNull() ?: 1
+            val amount = Config.values.sessionStatsTrackingMode.calculate(extractedAmount)
 
-        FishingStatTracker("pearls", pearlRegex, object : FishingStatHandler {
+            val extractedWeight = result["weight"]?.value ?: Weight.AVERAGE.glyph()
+            val weight = Weight.entries.find { it.glyph() == extractedWeight } ?: Weight.AVERAGE
+
+            stats[weight] = stats[weight]!! + amount
+        }, (33 to 0)),
+        FishingStatTracker("pearls", CatchType.PEARL.regex, object : FishingStatHandler<HashMap<PearlType, Int>> {
             val caughtPearls: HashMap<PearlType, Int> = hashMapOf(
                 PearlType.ROUGH to 0,
                 PearlType.POLISHED to 0,
@@ -88,6 +96,10 @@ class SessionStats : GnomeFeature {
                 val pearlType = PearlType.entries.find { resultType.contains(it.match) } ?: return
 
                 caughtPearls[pearlType] = caughtPearls[pearlType]!! + amount
+            }
+
+            override fun get(): HashMap<PearlType, Int> {
+                return caughtPearls
             }
 
             override fun formatUIText(): MutableComponent {
@@ -111,13 +123,33 @@ class SessionStats : GnomeFeature {
                 caughtPearls.replaceAll { _, _ -> 0 }
             }
         }, (75 to 0)),
-        FishingStatTracker("treasure", treasureRegex, GenericFishingStatHandler(), (132 to 0)),
-        FishingStatTracker("spirits", spiritRegex, GenericFishingStatHandler(), (173 to 0)),
-        FishingStatTracker("xp", xpRegex, object : FishingStatHandler {
+        FishingStatTracker("treasure", CatchType.TREASURE.regex, GenericTieredStatHandler(TreasureTier::class.java) { result, stats ->
+            val extractedAmount = result["amount"]?.value?.toIntOrNull() ?: 1
+            val amount = Config.values.sessionStatsTrackingMode.calculate(extractedAmount)
+
+            val extractedTier = result["tier"]?.value ?: TreasureTier.COMMON.match
+            val tier = TreasureTier.entries.find { it.match == extractedTier } ?: TreasureTier.COMMON
+
+            stats[tier] = stats[tier]!! + amount
+        }, (132 to 0)),
+        FishingStatTracker("spirits", CatchType.SPIRIT.regex, GenericTieredStatHandler(SpiritTier::class.java) { result, stats ->
+            val extractedAmount = result["amount"]?.value?.toIntOrNull() ?: 1
+            val amount = Config.values.sessionStatsTrackingMode.calculate(extractedAmount)
+
+            val extractedTier = result["tier"]?.value ?: SpiritTier.NORMAL.match
+            val tier = SpiritTier.entries.find { it.match == extractedTier } ?: SpiritTier.NORMAL
+
+            stats[tier] = stats[tier]!! + amount
+        }, (173 to 0)),
+        FishingStatTracker("xp", xpRegex, object : FishingStatHandler<Int> {
             var xp: Int = 0
             override fun handle(result: MatchGroupCollection) {
                 val amount = result["amount"]?.value?.toInt() ?: 0
                 xp += amount
+            }
+
+            override fun get(): Int {
+                return xp
             }
 
             override fun formatUIText(): MutableComponent {
@@ -132,14 +164,18 @@ class SessionStats : GnomeFeature {
         }
     )
 
+    @Suppress("unchecked_cast")
+    inline fun <reified T> getTrackerHandler(id: String): FishingStatHandler<T> {
+        val tracker = trackers.find { t -> t.id == id }!!
+        return tracker.handler as FishingStatHandler<T>
+    }
+
     fun onChatMessage(component: Component) {
+        if(!component.string.contains("You caught:", ignoreCase = true)) return
         trackers.forEach { tracker ->
             val result = tracker.regex().find(component.string)?.groups ?: return@forEach
             tracker.handler.handle(result)
         }
-    }
-
-    override fun cleanup() {
     }
 
     fun hotbarSessionStatsLayer(): HudElement {
@@ -168,6 +204,55 @@ class SessionStats : GnomeFeature {
                 it.render(graphics)
             }
         }
+    }
+
+    @Suppress("unchecked_cast")
+    fun summarize() {
+        val pearls = getTrackerHandler<HashMap<PearlType, Int>>("pearls")
+        val fish = getTrackerHandler<HashMap<Weight, Int>>("fish")
+        val treasure = getTrackerHandler<HashMap<TreasureTier, Int>>("treasure")
+        val spirits = getTrackerHandler<HashMap<SpiritTier, Int>>("spirits")
+
+        var message = Component.empty()
+            .append(Component.literal(" ".repeat(70)).withColor(0x00FF00).withStyle(Style.EMPTY.withStrikethrough(true)))
+            .appendNewLine()
+            .append(Component.literal("Session Summary").withColor(0x66FF66).withBold(true))
+            .appendNewLine()
+            .appendNewLine()
+
+        fish.get().toSortedMap(compareBy { it.ordinal }).forEach { (weight, amount) ->
+            message = message.append(
+                weight.icon()
+            ).append(Component.literal(" $amount "))
+        }
+
+        message = message.appendNewLine()
+
+        pearls.get().toSortedMap(compareBy { it.pristinePart }).forEach { (type, amount) ->
+            message = message.append(
+                texture(type.resource)
+            ).append(Component.literal(" $amount "))
+        }
+
+        message = message.appendNewLine()
+
+        treasure.get().toSortedMap(compareBy { it.ordinal }).forEach { (type, amount) ->
+            message = message.append(
+                texture(type.resource)
+            ).append(Component.literal(" $amount "))
+        }
+
+        message = message.appendNewLine()
+
+        spirits.get().toSortedMap(compareBy { it.ordinal }).forEach { (type, amount) ->
+            message = message.append(
+                texture(type.resource)
+            ).append(Component.literal(" $amount "))
+        }
+
+        message = message.appendNewLine().append(Component.literal(" ".repeat(70)).withColor(0x00FF00).withStyle(Style.EMPTY.withStrikethrough(true)))
+
+        Minecraft.getInstance().sendMessage(message)
     }
 
     @Suppress("unused")
@@ -208,16 +293,13 @@ class SessionStats : GnomeFeature {
     class FishingStatTracker(
         val id: String,
         val regex: () -> Regex,
-        val handler: FishingStatHandler,
+        val handler: FishingStatHandler<*>,
         val uiOffset: () -> Pair<Int, Int>,
     ) {
-        constructor(id: String, regex: Regex, handler: FishingStatHandler, uiOffset: Pair<Int, Int>)
-            : this(id, { regex }, handler, { uiOffset })
-
-        constructor(id: String, regex: Regex, handler: FishingStatHandler, uiOffset: () -> Pair<Int, Int>)
+        constructor(id: String, regex: Regex, handler: FishingStatHandler<*>, uiOffset: () -> Pair<Int, Int>)
             : this(id, { regex }, handler, uiOffset)
 
-        constructor(id: String, regex: () -> Regex, handler: FishingStatHandler, uiOffset: Pair<Int, Int>)
+        constructor(id: String, regex: () -> Regex, handler: FishingStatHandler<*>, uiOffset: Pair<Int, Int>)
             : this(id, regex, handler, { uiOffset })
 
         fun render(graphics: GuiGraphicsExtractor) {
@@ -242,26 +324,32 @@ class SessionStats : GnomeFeature {
         }
     }
 
-    class GenericFishingStatHandler : FishingStatHandler {
-        var value: Int = 0
-        override fun handle(result: MatchGroupCollection) {
-            val extractedAmount = result["amount"]?.value?.toIntOrNull() ?: 1
-            val amount = Config.values.sessionStatsTrackingMode.calculate(extractedAmount)
+    class GenericTieredStatHandler<T : Enum<T>>(
+        enumClass: Class<T>,
+        val handle: (result: MatchGroupCollection, stats: HashMap<T, Int>) -> Unit
+    ) : FishingStatHandler<HashMap<T, Int>> {
+        private val stats: HashMap<T, Int> = HashMap(enumClass.enumConstants.associateWith { 0 })
 
-            value += amount
+        override fun handle(result: MatchGroupCollection) {
+            handle.invoke(result, stats)
+        }
+
+        override fun get(): HashMap<T, Int> {
+            return stats
         }
 
         override fun reset() {
-            value = 0
+            stats.replaceAll { _, _ -> 0 }
         }
 
         override fun formatUIText(): MutableComponent {
-            return Component.literal(Config.values.sessionStatsPrecisionMode.calculate(value))
+            return Component.literal(Config.values.sessionStatsPrecisionMode.calculate(stats.values.sumOf { it }))
         }
     }
 
-    interface FishingStatHandler {
+    interface FishingStatHandler<T> {
         fun handle(result: MatchGroupCollection)
+        fun get(): T
         fun reset()
         fun formatUIText(): MutableComponent
     }

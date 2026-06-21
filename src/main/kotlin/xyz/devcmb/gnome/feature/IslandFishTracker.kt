@@ -44,9 +44,6 @@ class IslandFishTracker : GnomeFeature {
         }
     }
 
-    override fun cleanup() {
-    }
-
     fun addScoreboardEntries(): List<Component> {
         if(!Config.values.islandFishTrackerEnabled) return emptyList()
 

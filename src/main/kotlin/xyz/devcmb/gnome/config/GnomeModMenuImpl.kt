@@ -1,9 +1,8 @@
-package xyz.devcmb.gnome.lib
+package xyz.devcmb.gnome.config
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory
 import com.terraformersmc.modmenu.api.ModMenuApi
 import net.minecraft.client.gui.screens.Screen
-import xyz.devcmb.gnome.config.Config
 
 class GnomeModMenuImpl : ModMenuApi {
     override fun getModConfigScreenFactory(): ConfigScreenFactory<Screen> {

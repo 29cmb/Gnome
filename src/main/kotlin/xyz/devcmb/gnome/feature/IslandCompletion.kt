@@ -23,9 +23,6 @@ class IslandCompletion : GnomeFeature {
     override fun init() {
     }
 
-    override fun cleanup() {
-    }
-
     fun renderSlot(graphics: GuiGraphicsExtractor, slot: Slot) {
         if(!Config.values.islandCompletionEnabled) return
         if(!isOnIsland()) return

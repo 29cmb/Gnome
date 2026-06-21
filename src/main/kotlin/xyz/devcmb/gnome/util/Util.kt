@@ -17,6 +17,7 @@ import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
+import net.minecraft.network.chat.contents.objects.AtlasSprite
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
@@ -197,4 +198,17 @@ fun ItemStack.getFirstLoreMatch(regex: Regex): MatchGroupCollection? {
     }
 
     return null
+}
+
+fun MutableComponent.appendNewLine(): MutableComponent {
+    return this.append(Component.literal("\n"))
+}
+
+// stealing from pe3ep part 4
+// dw guys he let me do this one
+// https://github.com/pe3ep/Trident/blob/master/src/main/kotlin/cc/pe3epwithyou/trident/state/FontCollection.kt
+
+fun texture(resource: Identifier, atlas: Identifier = AtlasSprite.DEFAULT_ATLAS): MutableComponent {
+    if (!Identifier.isValidPath(resource.path)) return Component.literal("???")
+    return Component.`object`(AtlasSprite(atlas, resource))
 }
