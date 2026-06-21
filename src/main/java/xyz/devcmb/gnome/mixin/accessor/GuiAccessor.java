@@ -10,4 +10,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface GuiAccessor {
     @Accessor("overlayMessageString")
     @Nullable Component gnome$getOverlayMessageString();
+
+    @Accessor("overlayMessageString")
+    void gnome$setOverlayMessageString(@Nullable Component overlayMessageString);
 }

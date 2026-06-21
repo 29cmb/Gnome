@@ -65,10 +65,10 @@ class Config {
     }
 
     data class CompletionData(
-        val average: Int,
-        val large: Int,
-        val massive: Int,
-        val gargantuan: Int
+        var average: Int,
+        var large: Int,
+        var massive: Int,
+        var gargantuan: Int
     )
 
     companion object {

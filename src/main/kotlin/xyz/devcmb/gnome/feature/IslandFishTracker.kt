@@ -1,6 +1,8 @@
 package xyz.devcmb.gnome.feature
 
 import dev.isxander.yacl3.api.OptionDescription
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
+import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
@@ -9,8 +11,12 @@ import net.minecraft.world.item.Items
 import xyz.devcmb.gnome.config.Config
 import xyz.devcmb.gnome.data.Island
 import xyz.devcmb.gnome.data.Weight
+import xyz.devcmb.gnome.mixin.accessor.GuiAccessor
 import xyz.devcmb.gnome.util.getFirstLoreMatch
+import xyz.devcmb.gnome.util.isOnFishing
+import xyz.devcmb.gnome.util.isOnIsland
 import xyz.devcmb.gnome.util.withFont
+import java.time.Instant
 import kotlin.reflect.KMutableProperty0
 
 class IslandFishTracker : GnomeFeature {
@@ -21,7 +27,21 @@ class IslandFishTracker : GnomeFeature {
     )
     override val enabledProperty: KMutableProperty0<Boolean> = Config.values::islandFishTrackerEnabled
 
+    var lastFishDiscovery: Long = 0
+
     override fun init() {
+        ClientTickEvents.END_CLIENT_TICK.register {
+            if(!isOnIsland() || !isOnFishing() || lastFishDiscovery + 7 > Instant.now().epochSecond) return@register
+            val actionBar = (Minecraft.getInstance().gui as GuiAccessor).`gnome$getOverlayMessageString`() ?: return@register
+
+            Weight.entries.forEach {
+                if(actionBar.string.contains(it.newFishGlyph())) {
+                    val currentIsland = Island.currentIsland ?: return@forEach
+                    currentIsland.discoverNewFish(it)
+                    lastFishDiscovery = Instant.now().epochSecond
+                }
+            }
+        }
     }
 
     override fun cleanup() {

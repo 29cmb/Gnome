@@ -25,6 +25,19 @@ enum class Island(val islandName: String) {
         Config.state.islandProgress[this] = data
     }
 
+    fun discoverNewFish(weight: Weight) {
+        val currentData = getCompletionData()
+
+        when(weight) {
+            Weight.AVERAGE -> currentData.average--
+            Weight.LARGE -> currentData.large--
+            Weight.MASSIVE -> currentData.massive--
+            Weight.GARGANTUAN -> currentData.gargantuan--
+        }
+
+        Config.handler.save()
+    }
+
     companion object {
         var currentIsland: Island? = null
 

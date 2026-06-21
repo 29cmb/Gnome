@@ -4,9 +4,13 @@ import com.mojang.brigadier.CommandDispatcher
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.Identifier
+import xyz.devcmb.gnome.data.Weight
 import xyz.devcmb.gnome.feature.SessionStats
+import xyz.devcmb.gnome.mixin.accessor.GuiAccessor
 import xyz.devcmb.gnome.util.Command
 import xyz.devcmb.gnome.util.sendMessage
+import xyz.devcmb.gnome.util.withFont
 
 object GnomeCommand {
     val sessionStats by lazy {
@@ -15,6 +19,34 @@ object GnomeCommand {
 
     fun register(dispatcher: CommandDispatcher<FabricClientCommandSource>) {
         Command("gnome") {
+            literal("debug") {
+                literal("simulate_discovery") {
+                    argument("weight") {
+                        suggests { _, builder ->
+                            Weight.entries.forEach { builder.suggest(it.name.lowercase()) }
+                            builder.buildFuture()
+                        }
+
+                        executes {
+                            val weightArg = it.getArgument("weight", String::class.java)
+                            val weight = Weight.entries
+                                .find { entry -> entry.name.equals(weightArg, true) }
+
+                            if(weight == null) {
+                                Minecraft.getInstance().sendMessage(
+                                    Component.literal("Invalid weight!").withColor(0x2bfb6f)
+                                )
+                                return@executes
+                            }
+
+                            (Minecraft.getInstance().gui as GuiAccessor).`gnome$setOverlayMessageString`(
+                                Component.literal(weight.newFishGlyph()).withFont(Identifier.fromNamespaceAndPath("mcc", "callouts"))
+                            )
+                        }
+                    }
+                }
+            }
+
             literal("session") {
                 literal("reset") {
                     executes {
