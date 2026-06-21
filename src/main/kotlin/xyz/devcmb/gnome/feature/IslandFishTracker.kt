@@ -35,7 +35,7 @@ class IslandFishTracker : GnomeFeature {
             val actionBar = (Minecraft.getInstance().gui as GuiAccessor).`gnome$getOverlayMessageString`() ?: return@register
 
             Weight.entries.forEach {
-                if(actionBar.string.contains(it.newFishGlyph())) {
+                if(actionBar.string.contains(it.newFishGlyph()) && !actionBar.string.contains("crab", ignoreCase = true)) {
                     val currentIsland = Island.currentIsland ?: return@forEach
                     currentIsland.discoverNewFish(it)
                     lastFishDiscovery = Instant.now().epochSecond
