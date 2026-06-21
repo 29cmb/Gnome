@@ -47,6 +47,14 @@ class SessionStats : GnomeFeature {
                 || actionBar.string.contains(Font.getGlyphString("_fonts/icon/xp_bonus_50.png"))
         }
 
+    val isRightSideOpen: Boolean
+        get() {
+            val player = Minecraft.getInstance().player
+            val hand = player?.mainArm ?: HumanoidArm.RIGHT
+            val offHandItem = player?.offhandItem
+            return hand == HumanoidArm.RIGHT || offHandItem == null || offHandItem.isEmpty
+        }
+
     override fun init() {
         HudElementRegistry.addFirst(
             Identifier.fromNamespaceAndPath(Gnome.MOD_ID, "fishing_session_stats"),
@@ -120,8 +128,7 @@ class SessionStats : GnomeFeature {
                 xp = 0
             }
         }) {
-            val hand = Minecraft.getInstance().player?.mainArm?.opposite ?: HumanoidArm.RIGHT
-            (if(hand == HumanoidArm.LEFT) 215 else 243) to (if (hasXPBoost) 30 else 43)
+            (if(isRightSideOpen) 215 else 243) to (if (hasXPBoost) 30 else 43)
         }
     )
 
@@ -148,11 +155,10 @@ class SessionStats : GnomeFeature {
                 181, 16
             )
 
-            val hand = Minecraft.getInstance().player?.mainArm?.opposite ?: HumanoidArm.RIGHT
             graphics.blit(
                 RenderPipelines.GUI_TEXTURED,
                 Identifier.fromNamespaceAndPath(Gnome.MOD_ID, "textures/gui/xp_amount.png"),
-                ((graphics.guiWidth() - 180) / 2) + (if(hand == HumanoidArm.LEFT) 182 else 211), graphics.guiHeight() - (if(hasXPBoost) 30 else 17),
+                ((graphics.guiWidth() - 180) / 2) + (if(isRightSideOpen) 182 else 211), graphics.guiHeight() - (if(hasXPBoost) 30 else 17),
                 0f, 0f,
                 39, 16,
                 39, 16
