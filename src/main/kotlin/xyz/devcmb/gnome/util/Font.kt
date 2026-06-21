@@ -12,11 +12,11 @@ object Font {
     }
 
     fun getGlyph(path: String): MutableComponent {
-        return Component.literal(glyphs[path]!!)
+        return Component.literal(glyphs[path] ?: "???")
             .withFont(Identifier.fromNamespaceAndPath("mcc", "icon"))
     }
 
     fun getGlyphString(path: String): String {
-        return glyphs[path]!!
+        return glyphs[path] ?: "???"
     }
 }

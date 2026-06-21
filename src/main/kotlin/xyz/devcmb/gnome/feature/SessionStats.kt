@@ -14,6 +14,7 @@ import net.minecraft.world.entity.HumanoidArm
 import xyz.devcmb.gnome.config.Config
 import xyz.devcmb.gnome.Gnome
 import xyz.devcmb.gnome.data.PearlType
+import xyz.devcmb.gnome.data.Weight
 import xyz.devcmb.gnome.util.isOnFishing
 import xyz.devcmb.gnome.util.isOnIsland
 import xyz.devcmb.gnome.mixin.accessor.GuiAccessor
@@ -59,10 +60,7 @@ class SessionStats : GnomeFeature {
         // its in here to prevent a NPE since the font isn't loaded yet
         FishingStatTracker("fish", {
             Regex("You caught: \\[[A-z, ]*[" +
-                    Font.getGlyphString("_fonts/icon/fishing/average_bubble.png") +
-                    Font.getGlyphString("_fonts/icon/fishing/large_bubble.png") +
-                    Font.getGlyphString("_fonts/icon/fishing/massive_bubble.png") +
-                    Font.getGlyphString("_fonts/icon/fishing/gargantuan_bubble.png") +
+                Weight.entries.joinToString("") { it.glyph() } +
             "].*] *(?:x(?<amount>[0-9]*))?")
         }, GenericFishingStatHandler(), (33 to 0)),
 

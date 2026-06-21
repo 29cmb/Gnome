@@ -186,3 +186,13 @@ fun ItemStack.getLore(): List<Component> {
         TooltipFlag.Default.NORMAL
     )
 }
+
+fun ItemStack.getFirstLoreMatch(regex: Regex): MatchGroupCollection? {
+    val lore = this.getLore()
+    lore.forEach {
+        val match = regex.find(it.string) ?: return@forEach
+        return@getFirstLoreMatch match.groups
+    }
+
+    return null
+}

@@ -13,6 +13,7 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import xyz.devcmb.gnome.Gnome
+import xyz.devcmb.gnome.data.Island
 import xyz.devcmb.gnome.feature.SessionStats
 import xyz.devcmb.gnome.util.withBold
 
@@ -49,6 +50,27 @@ class Config {
     @SerialEntry
     var islandCompletionEnabled: Boolean = true
 
+    // Island Fishing Tracker
+    @SerialEntry
+    var islandFishTrackerEnabled: Boolean = true
+
+    @SerialEntry
+    var state: State = State()
+
+    class State {
+        @SerialEntry
+        var islandProgress: HashMap<Island, CompletionData> = HashMap(
+            Island.entries.associateWith { CompletionData(-1, -1, -1, -1) }
+        )
+    }
+
+    data class CompletionData(
+        val average: Int,
+        val large: Int,
+        val massive: Int,
+        val gargantuan: Int
+    )
+
     companion object {
         val handler: ConfigClassHandler<Config> = ConfigClassHandler.createBuilder(Config::class.java)
             .id(Identifier.fromNamespaceAndPath(Gnome.MOD_ID, "config"))
@@ -61,6 +83,11 @@ class Config {
         val values: Config
             get() {
                 return handler.instance()
+            }
+
+        val state: State
+            get() {
+                return values.state
             }
 
         fun getScreen(parent: Screen): Screen = YetAnotherConfigLib("gnome") {
