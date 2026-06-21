@@ -9,6 +9,7 @@ import dev.isxander.yacl3.dsl.binding
 import dev.isxander.yacl3.dsl.enumDropdown
 import dev.isxander.yacl3.dsl.tickBox
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.ChatFormatting
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
@@ -37,6 +38,8 @@ class Config {
     var sessionStatsTrackingMode: SessionStats.StatTrackingMode = SessionStats.StatTrackingMode.AMOUNTS
     @SerialEntry
     var sessionStatsPearlTrackingMode: SessionStats.PearlTrackingMode = SessionStats.PearlTrackingMode.CATCHES
+    @SerialEntry
+    var sessionStatsPrecisionMode: SessionStats.StatPrecisionMode = SessionStats.StatPrecisionMode.ROUNDED
 
     // Plobby Ad Mute
     @SerialEntry
@@ -158,6 +161,27 @@ class Config {
                         ))
                         binding(values::sessionStatsTrackingMode, SessionStats.StatTrackingMode.AMOUNTS)
                         controller(enumDropdown<SessionStats.StatTrackingMode> {
+                            Component.literal(it.configName)
+                        })
+                    }
+
+                    options.register("precision_mode") {
+                        name(Component.literal("Stat Precision Mode"))
+                        description(OptionDescription.of(
+                            Component.literal("Determines how the numbers are rounded in the stat display"),
+                            Component.empty(),
+                            Component.empty()
+                                .append(Component.literal("Rounded mode").withBold(true))
+                                .append(Component.literal(" displays thousands and millions as rounded numbers, such as 1.2M or 5.2K")),
+                            Component.empty()
+                                .append(Component.literal("Precise mode").withBold(true))
+                                .append(Component.literal(" will always display the exact amount. ")
+                                    .append(Component.literal("This may cause overlapping in the GUI").withColor(ChatFormatting.RED.color!!))),
+                            Component.empty(),
+                            Component.literal("This setting does not affect the pearl stat for any mode other than catches")
+                        ))
+                        binding(values::sessionStatsPrecisionMode, SessionStats.StatPrecisionMode.ROUNDED)
+                        controller(enumDropdown<SessionStats.StatPrecisionMode> {
                             Component.literal(it.configName)
                         })
                     }

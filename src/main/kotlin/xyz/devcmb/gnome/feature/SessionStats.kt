@@ -20,6 +20,7 @@ import xyz.devcmb.gnome.util.isOnIsland
 import xyz.devcmb.gnome.mixin.accessor.GuiAccessor
 import xyz.devcmb.gnome.util.Font
 import xyz.devcmb.gnome.util.round2Places
+import xyz.devcmb.gnome.util.roundPlaces
 import xyz.devcmb.gnome.util.withFont
 import kotlin.reflect.KMutableProperty0
 
@@ -82,6 +83,14 @@ class SessionStats : GnomeFeature {
             }
 
             override fun formatUIText(): MutableComponent {
+                if(Config.values.sessionStatsPearlTrackingMode == PearlTrackingMode.CATCHES) {
+                    return Component.literal(
+                        Config.values.sessionStatsPrecisionMode.calculate(
+                            caughtPearls.entries.sumOf { it.value }
+                        )
+                    )
+                }
+
                 val amount = caughtPearls
                     .map { it.key.calculate(it.value) }
                     .fold(0.0) { a, b -> a + b }
@@ -104,7 +113,7 @@ class SessionStats : GnomeFeature {
             }
 
             override fun formatUIText(): MutableComponent {
-                return Component.literal(xp.toString())
+                return Component.literal(Config.values.sessionStatsPrecisionMode.calculate(xp))
             }
 
             override fun reset() {
@@ -159,6 +168,18 @@ class SessionStats : GnomeFeature {
     enum class StatTrackingMode(val configName: String, val calculate: (amount: Int) -> Int) {
         CATCHES("Catches", { 1 }),
         AMOUNTS("Amounts", { it })
+    }
+
+    @Suppress("unused")
+    enum class StatPrecisionMode(val configName: String, val calculate: (amount: Int) -> String) {
+        PRECISE("Precise", { it.toString() }),
+        ROUNDED("Rounded", {
+            when {
+                it >= 1_000_000 -> "${(it / 1_000_000.0).roundPlaces(1)}M"
+                it >= 1_000 -> "${(it / 1_000.0).roundPlaces(1)}K"
+                else -> it.toString()
+            }
+        })
     }
 
     @Suppress("unused")
@@ -229,7 +250,7 @@ class SessionStats : GnomeFeature {
         }
 
         override fun formatUIText(): MutableComponent {
-            return Component.literal(value.toString())
+            return Component.literal(Config.values.sessionStatsPrecisionMode.calculate(value))
         }
     }
 

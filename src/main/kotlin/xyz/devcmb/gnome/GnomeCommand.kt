@@ -45,6 +45,15 @@ object GnomeCommand {
                         }
                     }
                 }
+
+                literal("boost_session_stats") {
+                    executes {
+                        (sessionStats.trackers.filter { it.handler is SessionStats.GenericFishingStatHandler }).forEach {
+                            (it.handler as SessionStats.GenericFishingStatHandler).value =
+                                if ((0..1).random() == 0) 123_456 else 12_345_678
+                        }
+                    }
+                }
             }
 
             literal("session") {

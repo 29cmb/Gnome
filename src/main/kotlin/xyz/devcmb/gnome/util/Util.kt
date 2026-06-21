@@ -167,9 +167,11 @@ class Command(
     }
 }
 
-fun Double.round2Places(): String {
+fun Double.round2Places() = roundPlaces(2)
+
+fun Double.roundPlaces(places: Int): String {
     return BigDecimal(this.toString())
-        .setScale(2, RoundingMode.HALF_UP)
+        .setScale(places, RoundingMode.HALF_UP)
         .stripTrailingZeros()
         .toPlainString()
 }
