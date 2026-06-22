@@ -171,7 +171,7 @@ class SessionStats : GnomeFeature {
     }
 
     fun onChatMessage(component: Component) {
-        if(!component.string.contains("You caught:", ignoreCase = true)) return
+        if(!component.string.contains("You caught:", ignoreCase = true) && !component.string.contains("You earned:", ignoreCase = true)) return
         trackers.forEach { tracker ->
             val result = tracker.regex().find(component.string)?.groups ?: return@forEach
             tracker.handler.handle(result)
