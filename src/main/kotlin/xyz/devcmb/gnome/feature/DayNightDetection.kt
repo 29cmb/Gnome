@@ -60,7 +60,7 @@ class DayNightDetection : GnomeFeature {
                         )
                         .append(Component.literal(") It is now ${time.time} time!"))
                 ).withColor(0xf3ff60))
-                client.level?.playPlayerSound(time.sound, SoundSource.UI, 1f, 1f)
+                client.level?.playPlayerSound(time.sound, SoundSource.RECORDS, 1f, 1f)
             }
 
             currentTime = time

@@ -47,7 +47,7 @@ class CurrentsNotification: GnomeFeature {
                         ).withoutShadow().withColor(0xFFFFFF))
                         .append(Component.literal(") The currents have changed!"))
                 ).withColor(0x59ff58))
-                client.level?.playPlayerSound(SoundEvents.GOAT_HORN_SOUND_VARIANTS[2].value(), SoundSource.UI, 1f, 1f)
+                client.level?.playPlayerSound(SoundEvents.GOAT_HORN_SOUND_VARIANTS[2].value(), SoundSource.RECORDS, 1f, 1f)
             }
         }
     }

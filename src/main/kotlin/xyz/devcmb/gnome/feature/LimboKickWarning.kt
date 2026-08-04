@@ -26,7 +26,7 @@ class LimboKickWarning : GnomeFeature {
             if(component.string.contains("Warning! You are about to be kicked for being AFK in 10 seconds.", ignoreCase = true)) {
                 Minecraft.getInstance().level?.playPlayerSound(
                     SoundEvent(Identifier.fromNamespaceAndPath("mcc", "games.global.objective.map.alert"), Optional.empty()),
-                    SoundSource.UI, 1.2f, 1f
+                    SoundSource.RECORDS, 1.2f, 1f
                 )
             }
         }
