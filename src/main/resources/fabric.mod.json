@@ -34,7 +34,6 @@
 		"java": ">=25",
 		"fabric-api": "*",
 		"fabric-language-kotlin": "*",
-		"yet_another_config_lib_v3": ">=3.9.4",
-		"noxesium": ">=3.1.0"
+		"yet_another_config_lib_v3": ">=3.9.4"
 	}
 }
