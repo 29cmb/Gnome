@@ -12,6 +12,7 @@ import xyz.devcmb.gnome.feature.IslandCompletion
 import xyz.devcmb.gnome.feature.IslandFishTracker
 import xyz.devcmb.gnome.feature.LimboKickWarning
 import xyz.devcmb.gnome.feature.PlobbyAdMute
+import xyz.devcmb.gnome.feature.PylonBoundaries
 import xyz.devcmb.gnome.feature.SessionStats
 
 object Gnome : ModInitializer {
@@ -29,6 +30,7 @@ object Gnome : ModInitializer {
 		registerFeature(CurrentsNotification())
 		registerFeature(IslandCompletion())
 		registerFeature(IslandFishTracker())
+		registerFeature(PylonBoundaries())
 
 		ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
 			GnomeCommand.register(dispatcher)

@@ -57,6 +57,10 @@ class Config {
     @SerialEntry
     var islandFishTrackerEnabled: Boolean = true
 
+    // Pylon Boundaries
+    @SerialEntry
+    var pylonBoundariesEnabled: Boolean = true
+
     @SerialEntry
     var state: State = State()
 
