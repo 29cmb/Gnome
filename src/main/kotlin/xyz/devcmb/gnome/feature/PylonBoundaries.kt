@@ -48,6 +48,9 @@ class PylonBoundaries : GnomeFeature {
         }
     }
 
+    // this name is wrong
+    // its like this to prevent having to restart my game
+    // no im not fixing it
     private fun getRandomCirclePoint(center: Vec3): Vec3 {
         val level = Minecraft.getInstance().level!!
 

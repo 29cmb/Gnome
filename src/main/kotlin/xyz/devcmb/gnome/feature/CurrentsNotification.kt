@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import xyz.devcmb.gnome.config.Config
+import xyz.devcmb.gnome.util.FishingSpotInfo
 import xyz.devcmb.gnome.util.Font
 import xyz.devcmb.gnome.util.isOnFishing
 import xyz.devcmb.gnome.util.isOnIsland
@@ -29,16 +30,16 @@ class CurrentsNotification: GnomeFeature {
 
     override fun init() {
         ClientTickEvents.END_CLIENT_TICK.register { client ->
-            if(!isOnIsland() || !isOnFishing()) {
-                lastNotification = 0L
-                return@register
-            }
+            if(!isOnIsland() || !isOnFishing()) return@register
 
             val currentUnix = Instant.now().epochSecond
             val currentMinute = LocalDateTime.now().minute
 
             if(currentMinute == 0 && currentUnix > lastNotification + 120) {
                 lastNotification = currentUnix
+                FishingSpotInfo.spotCache.clear()
+
+                if(!Config.values.currentsNotificationEnabled) return@register
 
                 client.sendMessage(Component.empty().append(
                     Component.literal("(")

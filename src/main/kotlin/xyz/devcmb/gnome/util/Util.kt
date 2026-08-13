@@ -21,9 +21,11 @@ import net.minecraft.network.chat.contents.objects.AtlasSprite
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.phys.Vec3
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.concurrent.CompletableFuture
+import kotlin.math.roundToInt
 
 // stealing from pe3ep part 1
 // https://github.com/pe3ep/Trident/blob/master/src/main/kotlin/cc/pe3epwithyou/trident/state/MCCIState.kt
@@ -211,4 +213,8 @@ fun MutableComponent.appendNewLine(): MutableComponent {
 fun texture(resource: Identifier, atlas: Identifier = AtlasSprite.DEFAULT_ATLAS): MutableComponent {
     if (!Identifier.isValidPath(resource.path)) return Component.literal("???")
     return Component.`object`(AtlasSprite(atlas, resource))
+}
+
+fun Vec3.toRoundedString(): String {
+    return "${x.roundToInt()}, ${y.roundToInt()}, ${z.roundToInt()}"
 }

@@ -12,7 +12,9 @@ object Font {
     }
 
     fun getGlyph(path: String): MutableComponent {
-        return Component.literal(glyphs[path] ?: "???")
+        val glyph = glyphs[path] ?: return Component.literal("???")
+
+        return Component.literal(glyph)
             .withFont(Identifier.fromNamespaceAndPath("mcc", "icon"))
     }
 

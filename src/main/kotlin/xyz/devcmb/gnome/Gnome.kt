@@ -14,6 +14,7 @@ import xyz.devcmb.gnome.feature.LimboKickWarning
 import xyz.devcmb.gnome.feature.PlobbyAdMute
 import xyz.devcmb.gnome.feature.PylonBoundaries
 import xyz.devcmb.gnome.feature.SessionStats
+import xyz.devcmb.gnome.util.FishingSpotInfo
 
 object Gnome : ModInitializer {
 	const val MOD_ID: String = "gnome"
@@ -31,6 +32,8 @@ object Gnome : ModInitializer {
 		registerFeature(IslandCompletion())
 		registerFeature(IslandFishTracker())
 		registerFeature(PylonBoundaries())
+
+		FishingSpotInfo.handleCaching()
 
 		ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
 			GnomeCommand.register(dispatcher)
