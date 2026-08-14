@@ -40,7 +40,7 @@ class PylonBoundaries : GnomeFeature {
             repeat(10) {
                 val point = getRandomCirclePoint(pylonSource.position())
                 client.particleEngine.createParticle(
-                    DustParticleOptions(ChatFormatting.AQUA.color!!, Random.nextDouble(1.4, 2.4).toFloat()),
+                    DustParticleOptions(ChatFormatting.GREEN.color!!, Random.nextDouble(1.4, 2.4).toFloat()),
                     point.x, point.y, point.z,
                     0.0, 0.0, 0.0,
                 )
