@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.HoverEvent
 import net.minecraft.network.chat.Style
 import net.minecraft.resources.Identifier
+import xyz.devcmb.gnome.config.Config
 import xyz.devcmb.gnome.data.Island
 import xyz.devcmb.gnome.data.Weight
 import xyz.devcmb.gnome.feature.SessionStats
@@ -137,6 +138,7 @@ object GnomeCommand {
 
                         var formattedMessage = ""
                         spot.perks.forEach {
+                            if(it.first !in Config.values.spotInfoShownPerks) return@forEach
                             message = message.append(
                                 Component.literal("\n").withColor(ChatFormatting.WHITE.color!!)
                                     .append(Font.getGlyph(it.first.icon))

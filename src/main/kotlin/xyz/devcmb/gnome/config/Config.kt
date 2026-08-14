@@ -15,6 +15,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import xyz.devcmb.gnome.Gnome
 import xyz.devcmb.gnome.data.Island
+import xyz.devcmb.gnome.data.SpotPerk
 import xyz.devcmb.gnome.feature.SessionStats
 import xyz.devcmb.gnome.util.withBold
 
@@ -64,6 +65,10 @@ class Config {
     @SerialEntry
     var state: State = State()
 
+    // Fishing Spot Info
+    @SerialEntry
+    val spotInfoShownPerks: ArrayList<SpotPerk> = ArrayList(SpotPerk.entries)
+
     class State {
         @SerialEntry
         var islandProgress: HashMap<Island, CompletionData> = HashMap(
@@ -108,7 +113,7 @@ class Config {
 
                 groups.register("features") {
                     name(Component.literal("Features"))
-                    tooltip(Component.literal("Enable or disable certain features"))
+                    description(OptionDescription.of(Component.literal("Enable or disable certain features")))
 
                     Gnome.features.forEach { feature ->
                         options.register(feature.id) {
@@ -208,6 +213,29 @@ class Config {
                         controller(enumDropdown {
                             Component.literal(it.configName)
                         })
+                    }
+                }
+            }
+
+            categories.register("spot_info") {
+                name(Component.literal("Spot Info"))
+
+                groups.register("perk_formatters") {
+                    name(Component.literal("Perk Formatters"))
+                    description(OptionDescription.of(Component.literal("Enable or disable perks that will be included in the copyable message for a fishing spot.")))
+
+                    SpotPerk.entries.forEach {
+                        options.register(it.name.lowercase()) {
+                            name(Component.literal(it.displayText))
+                            binding(true, { it in values.spotInfoShownPerks }, { enabled ->
+                                if(enabled && it !in values.spotInfoShownPerks) {
+                                    values.spotInfoShownPerks.add(it)
+                                } else {
+                                    values.spotInfoShownPerks.remove(it)
+                                }
+                            })
+                            controller(tickBox())
+                        }
                     }
                 }
             }
