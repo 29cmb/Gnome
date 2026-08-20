@@ -64,24 +64,10 @@ class PylonBoundaries : GnomeFeature {
             else -> Vec3(center.x - pylonRadius, center.y, center.z + pylonRadius - side)
         }
 
-        if (!level.getBlockState(BlockPos.containing(point)).isAir) {
-            for (i in 0..100) {
+        if(!level.getBlockState(BlockPos.containing(point)).isAir) {
+            for(i in 0..100) {
                 val newPos = point.with(Direction.Axis.Y, point.y + i * 0.25)
-
-                if (level.getBlockState(BlockPos.containing(newPos)).isAir) {
-                    point = newPos
-                    break
-                }
-            }
-        }
-
-        if (!level.getBlockState(BlockPos.containing(point).below()).isAir) {
-            for (i in 1..100) {
-                val newPos = point.with(Direction.Axis.Y, point.y - i * 0.25)
-
-                if (level.getBlockState(BlockPos.containing(newPos)).isAir &&
-                    !level.getBlockState(BlockPos.containing(newPos).below()).isAir
-                ) {
+                if(level.getBlockState(BlockPos.containing(newPos)).isAir) {
                     point = newPos
                     break
                 }
