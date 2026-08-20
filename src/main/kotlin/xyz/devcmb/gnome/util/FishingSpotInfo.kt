@@ -41,11 +41,13 @@ object FishingSpotInfo {
             ?.firstOrNull()
             ?: return null
 
+        val lines = display.text.string.split("\n")
+        if(!lines.any { it == "Fishing Spot" }) return null
+
         if(spotCache.any { it.display == display }) return display
 
-        val lines = display.text.string.split("\n")
         val stock = StockLevel.entries.find {
-            lines[2].contains(it.displayText)
+            lines.getOrNull(2)?.contains(it.displayText) ?: false
         } ?: return null
         val perkLines = lines.drop(4)
 
