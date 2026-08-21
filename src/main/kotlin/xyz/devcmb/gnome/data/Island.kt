@@ -15,7 +15,9 @@ enum class Island(val islandName: String) {
 
     SUNKEN_SWAMP("Sunken Swamp"),
     MIRRORED_OASIS("Mirrored Oasis"),
-    VOLCANIC_SPRINGS("Volcanic Springs");
+    VOLCANIC_SPRINGS("Volcanic Springs"),
+
+    UNKNOWN("Unknown");
 
     fun getCompletionData(): Config.CompletionData {
         return Config.state.islandProgress[this]!!

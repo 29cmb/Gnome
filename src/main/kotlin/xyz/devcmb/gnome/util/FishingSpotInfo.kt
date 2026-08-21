@@ -62,7 +62,7 @@ object FishingSpotInfo {
         spotCache.add(FishingSpot(
             display,
             bobber.position(),
-            Island.currentIsland!!,
+            Island.currentIsland ?: Island.UNKNOWN,
             stock,
             perks
         ))
