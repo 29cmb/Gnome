@@ -9,9 +9,9 @@ import dev.isxander.yacl3.dsl.binding
 import dev.isxander.yacl3.dsl.enumDropdown
 import dev.isxander.yacl3.dsl.tickBox
 import net.fabricmc.loader.api.FabricLoader
-import net.minecraft.ChatFormatting
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.TextColor
 import net.minecraft.resources.Identifier
 import xyz.devcmb.gnome.Gnome
 import xyz.devcmb.gnome.data.Island
@@ -185,7 +185,7 @@ class Config {
                             Component.empty()
                                 .append(Component.literal("Precise mode").withBold(true))
                                 .append(Component.literal(" will always display the exact amount. ")
-                                    .append(Component.literal("This may cause overlapping in the GUI").withColor(ChatFormatting.RED.color!!))),
+                                    .append(Component.literal("This may cause overlapping in the GUI").withColor(TextColor.RED))),
                             Component.empty(),
                             Component.literal("This setting does not affect the pearl stat for any mode other than catches")
                         ))

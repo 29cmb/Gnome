@@ -68,7 +68,7 @@ class DayNightDetection : GnomeFeature {
     }
 
     fun getCurrentTime(client: Minecraft): Time? {
-        val timeBossBar = client.gui.bossOverlay as BossEventAccessor
+        val timeBossBar = client.gui.hud.bossOverlay as BossEventAccessor
         val events = HashMap(timeBossBar.`gnome$getEvents`())
 
         val fishingBar = events.toList().firstOrNull {

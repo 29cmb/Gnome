@@ -40,11 +40,11 @@ fun MutableComponent.withFont(identifier: Identifier)
 fun MutableComponent.withBold(toggle: Boolean)
     = this.withStyle(Style.EMPTY.withBold(toggle))
 
-fun Minecraft.sendMessage(message: Component) = this.gui.chat.addClientSystemMessage(message)
+fun Minecraft.sendMessage(message: Component) = this.gui.hud.chat.addClientSystemMessage(message)
 
 // todo: maybe replace with noxesium instance information
 fun isOnFishing(): Boolean {
-    val tabList = (Minecraft.getInstance().gui.tabList as TabListAccessor)
+    val tabList = (Minecraft.getInstance().gui.hud.tabList as TabListAccessor)
     val footer = tabList.`gnome$getFooter`() ?: return false
 
     return footer.string.contains("fishtance", ignoreCase = true)

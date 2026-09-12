@@ -2,12 +2,12 @@ package xyz.devcmb.gnome.feature
 
 import dev.isxander.yacl3.api.OptionDescription
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
-import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.particles.DustParticleOptions
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.TextColor
 import net.minecraft.world.phys.Vec3
 import xyz.devcmb.gnome.config.Config
 import xyz.devcmb.gnome.mixin.accessor.BossEventAccessor
@@ -28,7 +28,7 @@ class PylonBoundaries : GnomeFeature {
     override fun init() {
         ClientTickEvents.END_CLIENT_TICK.register { client ->
             if(!Config.values.pylonBoundariesEnabled || !isOnIsland() || !isOnFishing()) return@register
-            val bossBars = (client.gui.bossOverlay as BossEventAccessor).`gnome$getEvents`()
+            val bossBars = (client.gui.hud.bossOverlay as BossEventAccessor).`gnome$getEvents`()
 
             val bossBar = bossBars.toList().find { it.second.name.string.contains("pylon", ignoreCase = true) }
             if(bossBar == null) return@register
@@ -40,7 +40,7 @@ class PylonBoundaries : GnomeFeature {
             repeat(10) {
                 val point = getRandomCirclePoint(pylonSource.position())
                 client.particleEngine.createParticle(
-                    DustParticleOptions(ChatFormatting.GREEN.color!!, Random.nextDouble(1.4, 2.4).toFloat()),
+                    DustParticleOptions(TextColor.GREEN.value, Random.nextDouble(1.4, 2.4).toFloat()),
                     point.x, point.y, point.z,
                     0.0, 0.0, 0.0,
                 )

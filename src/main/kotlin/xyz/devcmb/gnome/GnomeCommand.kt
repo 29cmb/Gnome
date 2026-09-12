@@ -2,18 +2,18 @@ package xyz.devcmb.gnome
 
 import com.mojang.brigadier.CommandDispatcher
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
-import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.HoverEvent
 import net.minecraft.network.chat.Style
+import net.minecraft.network.chat.TextColor
 import net.minecraft.resources.Identifier
 import xyz.devcmb.gnome.config.Config
 import xyz.devcmb.gnome.data.Island
 import xyz.devcmb.gnome.data.Weight
 import xyz.devcmb.gnome.feature.SessionStats
-import xyz.devcmb.gnome.mixin.accessor.GuiAccessor
+import xyz.devcmb.gnome.mixin.accessor.HudAccessor
 import xyz.devcmb.gnome.util.Command
 import xyz.devcmb.gnome.util.FishingSpotInfo
 import xyz.devcmb.gnome.util.Font
@@ -52,7 +52,7 @@ object GnomeCommand {
                                 return@executes
                             }
 
-                            (Minecraft.getInstance().gui as GuiAccessor).`gnome$setOverlayMessageString`(
+                            (Minecraft.getInstance().gui.hud as HudAccessor).`gnome$setOverlayMessageString`(
                                 Component.literal(weight.newFishGlyph()).withFont(Identifier.fromNamespaceAndPath("mcc", "callouts"))
                             )
                         }
@@ -117,7 +117,7 @@ object GnomeCommand {
                         var message = Component.empty()
                             .append(Component.literal("Fishing Spot")
                                 .withBold(true)
-                                .withColor(ChatFormatting.YELLOW.color!!)
+                                .withColor(TextColor.YELLOW)
                             )
                             .appendNewLine()
                             .append(Component.literal("Starting Stock: ")
@@ -127,12 +127,12 @@ object GnomeCommand {
                             .appendNewLine()
                             .append(Component.literal("Island: ")
                                 .append(Component.literal(spot.island.islandName)
-                                    .withColor(ChatFormatting.GREEN.color!!))
+                                    .withColor(TextColor.GREEN))
                                 .withColor(0xA8B0B0))
                             .appendNewLine()
                             .append(Component.literal("Location: ")
                                 .append(Component.literal(spot.loc.toRoundedString())
-                                    .withColor(ChatFormatting.AQUA.color!!))
+                                    .withColor(TextColor.AQUA))
                                 .withColor(0xA8B0B0)
                             )
 
@@ -140,7 +140,7 @@ object GnomeCommand {
                         spot.perks.forEach {
                             if(it.first !in Config.values.spotInfoShownPerks) return@forEach
                             message = message.append(
-                                Component.literal("\n").withColor(ChatFormatting.WHITE.color!!)
+                                Component.literal("\n").withColor(TextColor.WHITE)
                                     .append(Font.getGlyph(it.first.icon))
                                     .append(Component.literal("+${it.second}${if(!it.first.numerical) "%" else ""} "))
                                     .append(Component.literal(it.first.displayText).withColor(it.first.type.color))
@@ -151,7 +151,7 @@ object GnomeCommand {
 
                         message = message.appendNewLine().appendNewLine().append(
                             Component.literal("[Click to Copy]")
-                                .withStyle(Style.EMPTY.withColor(ChatFormatting.GREEN.color!!)
+                                .withStyle(Style.EMPTY.withColor(TextColor.GREEN)
                                     .withClickEvent(
                                         ClickEvent.CopyToClipboard(formattedMessage)
                                     )

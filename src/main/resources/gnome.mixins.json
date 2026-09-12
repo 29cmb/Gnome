@@ -5,8 +5,8 @@
 	"mixins": [
 		"accessor.BossEventAccessor",
 		"accessor.TabListAccessor",
-		"modify.GuiMixin",
-		"accessor.GuiAccessor",
+		"modify.HudMixin",
+		"accessor.HudAccessor",
 		"modify.ClientPacketMixin",
 		"modify.AbstractContainerScreenMixin",
 		"modify.BitmapProviderMixin"

@@ -34,8 +34,8 @@ dependencies {
 	implementation("net.fabricmc:fabric-loader:${providers.gradleProperty("loader_version").get()}")
 
 	// Dependencies
-	implementation("dev.isxander:yet-another-config-lib:3.9.4+26.1-fabric")
-	implementation("com.terraformersmc:modmenu:18.0.0-beta.1")
+	implementation("dev.isxander:yet-another-config-lib:3.9.6+26.2-fabric")
+	compileOnly("com.terraformersmc:modmenu:20.0.2")
 	runtimeOnly("me.djtheredstoner:DevAuth-fabric:1.2.2")
 
 	// Fabric API. This is technically optional, but you probably want it anyway.

@@ -21,7 +21,7 @@ import xyz.devcmb.gnome.data.TreasureTier
 import xyz.devcmb.gnome.data.Weight
 import xyz.devcmb.gnome.util.isOnFishing
 import xyz.devcmb.gnome.util.isOnIsland
-import xyz.devcmb.gnome.mixin.accessor.GuiAccessor
+import xyz.devcmb.gnome.mixin.accessor.HudAccessor
 import xyz.devcmb.gnome.util.Font
 import xyz.devcmb.gnome.util.appendNewLine
 import xyz.devcmb.gnome.util.round2Places
@@ -44,7 +44,7 @@ class SessionStats : GnomeFeature {
 
     val hasXPBoost: Boolean
         get() {
-            val actionBar = (Minecraft.getInstance().gui as GuiAccessor).`gnome$getOverlayMessageString`()
+            val actionBar = (Minecraft.getInstance().gui.hud as HudAccessor).`gnome$getOverlayMessageString`()
                 ?: Component.empty()
 
             return actionBar.string.contains(Font.getGlyphString("_fonts/icon/xp_bonus.png"))

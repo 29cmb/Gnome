@@ -1,8 +1,8 @@
 package xyz.devcmb.gnome.mixin.modify;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.scores.Objective;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,8 +17,8 @@ import xyz.devcmb.gnome.util.UtilKt;
 
 import java.util.Arrays;
 
-@Mixin(Gui.class)
-public class GuiMixin {
+@Mixin(Hud.class)
+public class HudMixin {
     @ModifyVariable(method = "extractSelectedItemName", at = @At("STORE"), name = "y")
     private int raiseItem(int y) {
         if(UtilKt.isOnIsland() && UtilKt.isOnFishing()) return y - 12;

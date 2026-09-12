@@ -30,7 +30,7 @@ public class ClientPacketMixin {
         if(!UtilKt.isOnIsland() || !UtilKt.isOnFishing() || !Minecraft.getInstance().isSameThread()) return;
 
         Minecraft mc = Minecraft.getInstance();
-        Screen currentScreen = mc.screen;
+        Screen currentScreen = mc.gui.screen();
 
         if(!(currentScreen instanceof AbstractContainerScreen<?> screen)) return;
 

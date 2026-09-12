@@ -28,7 +28,7 @@ class IslandCompletion : GnomeFeature {
         if(!isOnIsland()) return
         if(!slot.item.`is`(Items.ECHO_SHARD)) return
 
-        val inventory = Minecraft.getInstance().screen as? ContainerScreen ?: return
+        val inventory = Minecraft.getInstance().gui.screen() as? ContainerScreen ?: return
         if(!inventory.title.string.contains("FISHING PROGRESS")) return
 
         val lore = slot.item.getLore()

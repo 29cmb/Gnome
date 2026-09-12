@@ -11,7 +11,7 @@ import net.minecraft.world.item.Items
 import xyz.devcmb.gnome.config.Config
 import xyz.devcmb.gnome.data.Island
 import xyz.devcmb.gnome.data.Weight
-import xyz.devcmb.gnome.mixin.accessor.GuiAccessor
+import xyz.devcmb.gnome.mixin.accessor.HudAccessor
 import xyz.devcmb.gnome.util.getFirstLoreMatch
 import xyz.devcmb.gnome.util.isOnFishing
 import xyz.devcmb.gnome.util.isOnIsland
@@ -32,7 +32,7 @@ class IslandFishTracker : GnomeFeature {
     override fun init() {
         ClientTickEvents.END_CLIENT_TICK.register {
             if(!isOnIsland() || !isOnFishing() || lastFishDiscovery + 7 > Instant.now().epochSecond) return@register
-            val actionBar = (Minecraft.getInstance().gui as GuiAccessor).`gnome$getOverlayMessageString`() ?: return@register
+            val actionBar = (Minecraft.getInstance().gui.hud as HudAccessor).`gnome$getOverlayMessageString`() ?: return@register
 
             Weight.entries.forEach {
                 if(actionBar.string.contains(it.newFishGlyph()) && !actionBar.string.contains("crab", ignoreCase = true)) {
